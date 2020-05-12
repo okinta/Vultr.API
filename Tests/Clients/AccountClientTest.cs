@@ -11,7 +11,7 @@ namespace Tests.Clients
             var client = new VultrClient(Settings.Default.VultrApiKey);
             var account = client.Account.GetInfo();
 
-            Assert.True(float.TryParse(account.Account.Balance, out float _));
+            Assert.True(float.TryParse(account.Account.balance, out float _));
         }
     }
 }
