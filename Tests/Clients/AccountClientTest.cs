@@ -1,4 +1,4 @@
-﻿using System.Configuration;
+﻿using System;
 using Vultr.API;
 using Xunit;
 
@@ -8,7 +8,18 @@ namespace Tests.Clients
     {
         private static string ApiKey
         {
-            get { return ConfigurationManager.AppSettings["ApiKey"]; }
+            get
+            {
+                var key = Settings.Default.VultrApiKey;
+
+                if (string.IsNullOrEmpty(key))
+                {
+
+                    throw new InvalidOperationException("API key must be set");
+                }
+
+                return key;
+            }
         }
 
         [Fact]
