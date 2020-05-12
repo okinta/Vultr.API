@@ -5,23 +5,23 @@ namespace Vultr.API.Models.Responses
 {
     public class FirewallRule
     {
-        public int RuleNumber { get; set; }
-        public string Action { get; set; }
-        public string Protocol { get; set; }
-        public string Port { get; set; }
-        public string Subnet { get; set; }
-        public int SubnetSize { get; set; }
+        public int rulenumber { get; set; }
+        public string action { get; set; }
+        public string protocol { get; set; }
+        public string port { get; set; }
+        public string subnet { get; set; }
+        public int subnet_size { get; set; }
     }
 
     public class FirewallGroup
     {
-        public string FirewallGroupID { get; set; }
-        public string Description { get; set; }
-        public string DateCreated { get; set; }
-        public string DateModified { get; set; }
-        public int InstanceCount { get; set; }
-        public int RuleCount { get; set; }
-        public int MaxRuleCount { get; set; }
+        public string FIREWALLGROUPID { get; set; }
+        public string description { get; set; }
+        public string date_created { get; set; }
+        public string date_modified { get; set; }
+        public int instance_count { get; set; }
+        public int rule_count { get; set; }
+        public int max_rule_count { get; set; }
     }
 
     public struct FirewallRuleResult
@@ -70,7 +70,7 @@ namespace Vultr.API.Models.Responses
 
     public class IPTYPE
     {
-        private readonly string Key;
+        private string Key;
         public static readonly IPTYPE IPV4 = new IPTYPE("v4");
         public static readonly IPTYPE IPV6 = new IPTYPE("v6");
 
@@ -87,7 +87,7 @@ namespace Vultr.API.Models.Responses
 
     public class FirewallDirection
     {
-        private readonly string Key;
+        private string Key;
         public static readonly FirewallDirection DIRECTIONIN = new FirewallDirection("in");
         public static readonly FirewallDirection DIRECTIONOUT = new FirewallDirection("out");
 

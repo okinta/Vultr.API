@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -26,9 +26,11 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/list", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<List<Domain>>((st ?? "") == "[]" ? "{}" : st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer = JsonConvert.DeserializeObject<List<Domain>>((st ?? "") == "[]" ? "{}" : st);
+                }
             }
 
             return new DomainResult() { ApiResponse = httpResponse, Domains = answer };
@@ -45,9 +47,11 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/records?domain=" + domain, _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<List<Record>>((st ?? "") == "[]" ? "{}" : st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer = JsonConvert.DeserializeObject<List<Record>>((st ?? "") == "[]" ? "{}" : st);
+                }
             }
 
             return new RecordResult() { ApiResponse = httpResponse, Records = answer };
@@ -61,16 +65,16 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public DomainCreateResult CreateDomain(string domain, IPAddress serverip)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("domain", domain),
-                new KeyValuePair<string, object>("serverip", serverip.ToString())
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("domain", domain));
+            dict.Add(new KeyValuePair<string, object>("serverip", serverip.ToString()));
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/create_domain", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new DomainCreateResult() { ApiResponse = httpResponse };
@@ -84,20 +88,20 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public DomainCreateResult CreateDomain(Record Record, string domain)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("domain", domain),
-                new KeyValuePair<string, object>("data", Record.Data),
-                new KeyValuePair<string, object>("name", Record.Name),
-                new KeyValuePair<string, object>("type", Record.Type),
-                new KeyValuePair<string, object>("ttl", Record.TTL),
-                new KeyValuePair<string, object>("priority", Record.Priority)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("domain", domain));
+            dict.Add(new KeyValuePair<string, object>("data", Record.data));
+            dict.Add(new KeyValuePair<string, object>("name", Record.name));
+            dict.Add(new KeyValuePair<string, object>("type", Record.type));
+            dict.Add(new KeyValuePair<string, object>("ttl", Record.ttl));
+            dict.Add(new KeyValuePair<string, object>("priority", Record.priority));
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/create_record", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new DomainCreateResult() { ApiResponse = httpResponse };
@@ -110,15 +114,15 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public DomainDeleteResult DeleteDomain(string domain)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("domain", domain)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("domain", domain));
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/delete_domain", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new DomainDeleteResult() { ApiResponse = httpResponse };
@@ -132,16 +136,16 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public RecordDeleteResult DeleteRecord(string domain, int RECORDID)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("domain", domain),
-                new KeyValuePair<string, object>("RECORDID", RECORDID)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("domain", domain));
+            dict.Add(new KeyValuePair<string, object>("RECORDID", RECORDID));
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/delete_record", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new RecordDeleteResult() { ApiResponse = httpResponse };
@@ -154,16 +158,16 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public DomainUpdateResult DNSSECEnable(string domain)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("domain", domain),
-                new KeyValuePair<string, object>("enable", "yes")
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("domain", domain));
+            dict.Add(new KeyValuePair<string, object>("enable", "yes"));
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/dnssec_enable", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new DomainUpdateResult() { ApiResponse = httpResponse };
@@ -180,9 +184,11 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/dnssec_info?domain=" + domain, _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JArray.Parse(st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer = JArray.Parse(st);
+                }
             }
 
             return new DNSSECKeyResult() { ApiResponse = httpResponse, DNSSECKeys = answer };
@@ -199,9 +205,11 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/soa_info?domain=" + domain, _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<SOARecord>((st ?? "") == "[]" ? "{}" : st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer = JsonConvert.DeserializeObject<SOARecord>((st ?? "") == "[]" ? "{}" : st);
+                }
             }
 
             return new SOAInfoResult() { ApiResponse = httpResponse, Record = answer };
@@ -215,17 +223,17 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public DomainUpdateResult SOAUpdate(string domain, SOARecord SOARecord)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("domain", domain),
-                new KeyValuePair<string, object>("nsprimary", SOARecord.NSPrimary),
-                new KeyValuePair<string, object>("email", SOARecord.Email)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("domain", domain));
+            dict.Add(new KeyValuePair<string, object>("nsprimary", SOARecord.nsprimary));
+            dict.Add(new KeyValuePair<string, object>("email", SOARecord.email));
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/soa_update", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new DomainUpdateResult() { ApiResponse = httpResponse };
@@ -240,20 +248,20 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public DomainUpdateResult UpdateRecord(string domain, Record Record)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("domain", domain),
-                new KeyValuePair<string, object>("RECORDID", Record.ID),
-                new KeyValuePair<string, object>("name", Record.Name),
-                new KeyValuePair<string, object>("data", Record.Data),
-                new KeyValuePair<string, object>("ttl", Record.TTL),
-                new KeyValuePair<string, object>("priority", Record.Priority)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("domain", domain));
+            dict.Add(new KeyValuePair<string, object>("RECORDID", Record.RECORDID));
+            dict.Add(new KeyValuePair<string, object>("name", Record.name));
+            dict.Add(new KeyValuePair<string, object>("data", Record.data));
+            dict.Add(new KeyValuePair<string, object>("ttl", Record.ttl));
+            dict.Add(new KeyValuePair<string, object>("priority", Record.priority));
             var httpResponse = Extensions.ApiClient.ApiExecute("dns/update_record", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new DomainUpdateResult() { ApiResponse = httpResponse };

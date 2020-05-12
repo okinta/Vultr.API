@@ -3,6 +3,7 @@ using System.Net;
 
 namespace Vultr.API.Models.Responses
 {
+
     /// <summary>
     /// Application APPID, name, short_name, deploy_name and surcharge.
     /// </summary>
@@ -13,34 +14,30 @@ namespace Vultr.API.Models.Responses
         /// </summary>
         /// <returns>Integer</returns>
         /// <example>1</example>
-        public string ID { get; set; }
-
+        public string APPID { get; set; }
         /// <summary>
         /// Application name as string
         /// </summary>
         /// <returns>String</returns>
         /// <example>LEMP</example>
-        public string Name { get; set; }
-
+        public string name { get; set; }
         /// <summary>
         /// Application short name
         /// </summary>
         /// <returns>lemp</returns>
-        public string ShortName { get; set; }
-
+        public string short_name { get; set; }
         /// <summary>
         /// Application deploy name
         /// </summary>
         /// <returns>String</returns>
         /// <example>LEMP on CentOS 6 x64</example>
-        public string DeployName { get; set; }
-
+        public string deploy_name { get; set; }
         /// <summary>
         /// Application's surcharge
         /// </summary>
         /// <returns>Double</returns>
         /// <example>0</example>
-        public string Surcharge { get; set; }
+        public string surcharge { get; set; }
     }
 
     /// <summary>
@@ -53,7 +50,6 @@ namespace Vultr.API.Models.Responses
         /// </summary>
         /// <returns>Applications Dictionary</returns>
         public Dictionary<string, Application> Applications { get; set; }
-
         /// <summary>
         /// Returns API Result with HttpWebResponse
         /// </summary>

@@ -6,10 +6,10 @@ namespace Vultr.API.Models.Responses
     public class OperatingSystem
     {
         public string OSID { get; set; }
-        public string Name { get; set; }
-        public string Arch { get; set; }
-        public string Family { get; set; }
-        public bool Windows { get; set; }
+        public string name { get; set; }
+        public string arch { get; set; }
+        public string family { get; set; }
+        public bool windows { get; set; }
     }
 
     public struct OperatingSystemResult

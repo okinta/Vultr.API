@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.IO;
+﻿using System.IO;
+using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -23,8 +23,10 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("account/info", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                answer = JsonConvert.DeserializeObject<Account>(streamReader.ReadToEnd());
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    answer = JsonConvert.DeserializeObject<Account>(streamReader.ReadToEnd());
+                }
             }
 
             return new AccountResult() { ApiResponse = httpResponse, Account = answer };

@@ -6,14 +6,14 @@ namespace Vultr.API.Models.Responses
     public class Region
     {
         public string DCID { get; set; }
-        public string Name { get; set; }
-        public string Country { get; set; }
-        public string Continent { get; set; }
-        public string State { get; set; }
-        public bool DDOSProtection { get; set; }
-        public bool BlockStorage { get; set; }
-        public string RegionCode { get; set; }
-        public int[] Availability { get; set; }
+        public string name { get; set; }
+        public string country { get; set; }
+        public string continent { get; set; }
+        public string state { get; set; }
+        public bool ddos_protection { get; set; }
+        public bool block_storage { get; set; }
+        public string regioncode { get; set; }
+        public int[] availability { get; set; }
     }
 
     public struct RegionResult

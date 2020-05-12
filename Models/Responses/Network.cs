@@ -6,11 +6,11 @@ namespace Vultr.API.Models.Responses
     public class Network
     {
         public string DCID { get; set; }
-        public string NetworkID { get; set; }
-        public string DateCreated { get; set; }
-        public string Description { get; set; }
-        public string V4Subnet { get; set; }
-        public int V4SubnetMask { get; set; }
+        public string NETWORKID { get; set; }
+        public string date_created { get; set; }
+        public string description { get; set; }
+        public string v4_subnet { get; set; }
+        public int v4_subnet_mask { get; set; }
     }
 
     public struct NetworkCreateResult

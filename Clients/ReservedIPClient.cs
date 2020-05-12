@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -24,9 +24,11 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("reservedip/list", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Dictionary<string, ReservedIP>>((st ?? "") == "[]" ? "{}" : st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer = JsonConvert.DeserializeObject<Dictionary<string, ReservedIP>>((st ?? "") == "[]" ? "{}" : st);
+                }
             }
 
             return new ReservedIPResult() { ApiResponse = httpResponse, ReservedIPs = answer };
@@ -41,19 +43,19 @@ namespace Vultr.API.Clients
         /// <returns>ReservedIP element with only SUBID.</returns>
         public ReservedIPCreateResult CreateReservedIp(int DCID, IPTYPE ip_type, string label)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("DCID", DCID),
-                new KeyValuePair<string, object>("ip_type", ip_type.ToString()),
-                new KeyValuePair<string, object>("label", label)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("DCID", DCID));
+            dict.Add(new KeyValuePair<string, object>("ip_type", ip_type.ToString()));
+            dict.Add(new KeyValuePair<string, object>("label", label));
             var answer = new ReservedIP();
             var httpResponse = Extensions.ApiClient.ApiExecute("reservedip/create", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<ReservedIP>((st ?? "") == "[]" ? "{}" : st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer = JsonConvert.DeserializeObject<ReservedIP>((st ?? "") == "[]" ? "{}" : st);
+                }
             }
 
             return new ReservedIPCreateResult() { ApiResponse = httpResponse, ReservedIP = answer };
@@ -68,19 +70,19 @@ namespace Vultr.API.Clients
         /// <returns>ReservedIP element with only SUBID.</returns>
         public ReservedIPConvertResult ConvertReservedIp(int SUBID, string ip_address, string label)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("SUBID", SUBID),
-                new KeyValuePair<string, object>("ip_address", ip_address),
-                new KeyValuePair<string, object>("label", label)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("SUBID", SUBID));
+            dict.Add(new KeyValuePair<string, object>("ip_address", ip_address));
+            dict.Add(new KeyValuePair<string, object>("label", label));
             var answer = new ReservedIP();
             var httpResponse = Extensions.ApiClient.ApiExecute("reservedip/convert", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<ReservedIP>((st ?? "") == "[]" ? "{}" : st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer = JsonConvert.DeserializeObject<ReservedIP>((st ?? "") == "[]" ? "{}" : st);
+                }
             }
 
             return new ReservedIPConvertResult() { ApiResponse = httpResponse, ReservedIP = answer };
@@ -94,16 +96,16 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public ReservedIPUpdateResult AttachReservedIp(int attach_SUBID, string ip_address)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("attach_SUBID", attach_SUBID),
-                new KeyValuePair<string, object>("ip_address", ip_address)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("attach_SUBID", attach_SUBID));
+            dict.Add(new KeyValuePair<string, object>("ip_address", ip_address));
             var httpResponse = Extensions.ApiClient.ApiExecute("reservedip/attach", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new ReservedIPUpdateResult() { ApiResponse = httpResponse };
@@ -117,16 +119,16 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public ReservedIPUpdateResult DetachReservedIp(int detach_SUBID, string ip_address)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("detach_SUBID", detach_SUBID),
-                new KeyValuePair<string, object>("ip_address", ip_address)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("detach_SUBID", detach_SUBID));
+            dict.Add(new KeyValuePair<string, object>("ip_address", ip_address));
             var httpResponse = Extensions.ApiClient.ApiExecute("reservedip/detach", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new ReservedIPUpdateResult() { ApiResponse = httpResponse };
@@ -139,15 +141,15 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public ReservedIPUpdateResult DeleteReservedIp(string ip_address)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("ip_address", ip_address)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("ip_address", ip_address));
             var httpResponse = Extensions.ApiClient.ApiExecute("reservedip/destroy", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new ReservedIPUpdateResult() { ApiResponse = httpResponse };

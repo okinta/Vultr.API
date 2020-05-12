@@ -24,9 +24,11 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("snapshot/list", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Dictionary<string, Snapshot>>((st ?? "") == "[]" ? "{}" : st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer = JsonConvert.DeserializeObject<Dictionary<string, Snapshot>>((st ?? "") == "[]" ? "{}" : st);
+                }
             }
 
             return new SnapshotResult() { ApiResponse = httpResponse, Snapshots = answer };
@@ -40,18 +42,18 @@ namespace Vultr.API.Clients
         /// <returns>Network element with only NETWORKID.</returns>
         public SnapshotCreateResult CreateSnapshot(int SUBID, string Description)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("SUBID", SUBID),
-                new KeyValuePair<string, object>("description", Description)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("SUBID", SUBID));
+            dict.Add(new KeyValuePair<string, object>("description", Description));
             var answer = new Snapshot();
             var httpResponse = Extensions.ApiClient.ApiExecute("snapshot/create", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Snapshot>((st ?? "") == "[]" ? "{}" : st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer = JsonConvert.DeserializeObject<Snapshot>((st ?? "") == "[]" ? "{}" : st);
+                }
             }
 
             return new SnapshotCreateResult() { ApiResponse = httpResponse, Snapshot = answer };
@@ -64,15 +66,15 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public SnapshotDeleteResult DeleteSnapshot(string SNAPSHOTID)
         {
-            var dict = new List<KeyValuePair<string, object>>
-            {
-                new KeyValuePair<string, object>("SNAPSHOTID", SNAPSHOTID)
-            };
+            var dict = new List<KeyValuePair<string, object>>();
+            dict.Add(new KeyValuePair<string, object>("SNAPSHOTID", SNAPSHOTID));
             var httpResponse = Extensions.ApiClient.ApiExecute("snapshot/destroy", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                }
             }
 
             return new SnapshotDeleteResult() { ApiResponse = httpResponse };

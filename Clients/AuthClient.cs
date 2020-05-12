@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.IO;
+﻿using System.IO;
+using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -13,6 +13,7 @@ namespace Vultr.API.Clients
             _ApiKey = ApiKey;
         }
 
+
         /// <summary>
         /// Retrieve information about the current API key.
         /// </summary>
@@ -23,9 +24,11 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("auth/info", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer.Auth = JsonConvert.DeserializeObject<Auth>(st);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string st = streamReader.ReadToEnd();
+                    answer.Auth = JsonConvert.DeserializeObject<Auth>(st);
+                }
             }
 
             return new AuthResult() { ApiResponse = httpResponse, Auth = answer.Auth };

@@ -7,11 +7,11 @@ namespace Vultr.API.Models.Responses
     {
         public int SUBID { get; set; }
         public int DCID { get; set; }
-        public string IPType { get; set; }
-        public string Subnet { get; set; }
-        public int SubnetSize { get; set; }
-        public string Label { get; set; }
-        public int AttachedSUBID { get; set; }
+        public string ip_type { get; set; }
+        public string subnet { get; set; }
+        public int subnet_size { get; set; }
+        public string label { get; set; }
+        public int attached_SUBID { get; set; }
     }
 
     public struct ReservedIPResult
