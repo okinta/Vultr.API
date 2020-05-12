@@ -1,5 +1,6 @@
 # Vultr.API - Simple .NET Vultr API Client
-### [Official Site][1]
+
+Forked from https://github.com/koraykaraman/Vultr.API
 
 .NET library to manage Vultr API currently supports;
 
@@ -11,7 +12,6 @@
 
 ### Features
 
-* Assemblies for .NET 4.5.2
 * Easy installation using [NuGet](https://www.nuget.org/packages/Vultr/) for most .NET flavors
 
 ### Example
@@ -37,5 +37,3 @@ Dim Backups As BackupResult = Client.Backup.GetBackups()
 Dim Servers As ServerResult = Client.Server.GetServers()
 
 ```
-
-  [1]: https://koraykaraman.com/project/1764/Vultr.API/
