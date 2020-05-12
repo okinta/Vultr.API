@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net;
-using System;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -34,6 +33,7 @@ namespace Vultr.API.Clients
 
             return new ServerResult() { ApiResponse = httpResponse, Servers = answer };
         }
+
         /// <summary>
         /// Changes the virtual machine to a different application. All data will be permanently lost.
         /// </summary>
@@ -59,6 +59,7 @@ namespace Vultr.API.Clients
 
             return new ServerResult() { ApiResponse = httpResponse, Servers = answer };
         }
+
         /// <summary>
         /// Retrieves a list of applications to which a virtual machine can be changed. Always check against this list before trying to switch applications because it is not possible to switch between every application combination.
         /// </summary>
@@ -78,6 +79,7 @@ namespace Vultr.API.Clients
 
             return new ApplicationResult() { ApiResponse = httpResponse, Applications = answer.Applications };
         }
+
         /// <summary>
         /// Disables automatic backups On a server. Once disabled, backups can only be enabled again by customer support.
         /// </summary>
@@ -101,6 +103,7 @@ namespace Vultr.API.Clients
 
             return new BackupResult() { ApiResponse = httpResponse, Backups = answer };
         }
+
         /// <summary>
         /// Enables automatic backups on a server.
         /// </summary>

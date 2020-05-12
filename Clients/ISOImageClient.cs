@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
+using System.Net;
+using System;
 using Vultr.API.Models.Responses;
+using Vultr.API.Exceptions;
+using System.Net.Http;
 
 namespace Vultr.API.Clients
 {
@@ -21,16 +24,21 @@ namespace Vultr.API.Clients
         /// <returns>List of all ISOs currently available on this account.</returns>
         public ISOImageResult GetISOImages()
         {
-            var answer = new Dictionary<string, ISOImage>();
             var httpResponse = Extensions.ApiClient.ApiExecute("iso/list", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            string content;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<string, ISOImage>>((st ?? "") == "[]" ? "{}" : st);
-                }
+                content = streamReader.ReadToEnd();
             }
+
+            if (httpResponse.StatusCode != HttpStatusCode.OK)
+            {
+                throw new HttpRequestException(
+                    string.Format("{0}: {1}", httpResponse.StatusCode, content));
+            }
+
+            var answer = JsonConvert.DeserializeObject<Dictionary<string, ISOImage>>(
+                (content ?? "") == "[]" ? "{}" : content);
 
             return new ISOImageResult() { ApiResponse = httpResponse, ISOImages = answer };
         }
@@ -44,11 +52,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("iso/list_public", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<string, ISOImage>>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<Dictionary<string, ISOImage>>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new ISOImageResult() { ApiResponse = httpResponse, ISOImages = answer };
@@ -61,20 +67,36 @@ namespace Vultr.API.Clients
         /// <returns>Returns backup list and HTTP API Respopnse.</returns>
         public ISOImageCreateResult CreateISOImage(Uri URL)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("url", URL.AbsoluteUri));
-            var answer = new ISOImageCreateResult();
-            var httpResponse = Extensions.ApiClient.ApiExecute("iso/create_from_url", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var dict = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer.ISOImage = JsonConvert.DeserializeObject<ISOImage>((st ?? "") == "[]" ? "{}" : st);
-                }
+                new KeyValuePair<string, object>("url", URL.AbsoluteUri)
+            };
+
+            var httpResponse = Extensions.ApiClient.ApiExecute(
+                "iso/create_from_url", _ApiKey, dict, "POST");
+
+            string content;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                content = streamReader.ReadToEnd();
             }
 
-            return new ISOImageCreateResult() { ApiResponse = httpResponse, ISOImage = answer.ISOImage };
+            if (httpResponse.StatusCode != HttpStatusCode.OK)
+            {
+                throw new HttpRequestException(
+                    string.Format("{0}: {1}", httpResponse.StatusCode, content));
+            }
+
+            var answer = new ISOImageCreateResult
+            {
+                ISOImage = JsonConvert.DeserializeObject<ISOImage>(
+                    (content ?? "") == "[]" ? "{}" : content)
+            };
+
+            return new ISOImageCreateResult() {
+                ApiResponse = httpResponse,
+                ISOImage = answer.ISOImage
+            };
         }
     }
 }

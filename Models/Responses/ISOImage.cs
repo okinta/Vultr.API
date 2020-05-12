@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Numerics;
 
 namespace Vultr.API.Models.Responses
 {
@@ -10,7 +11,7 @@ namespace Vultr.API.Models.Responses
         public string description { get; set; }
         public string date_created { get; set; }
         public string filename { get; set; }
-        public int size { get; set; }
+        public BigInteger size { get; set; }
         public string md5sum { get; set; }
         public string status { get; set; }
     }
