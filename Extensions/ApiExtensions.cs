@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Vultr.API.Extensions
 {
@@ -75,6 +78,46 @@ namespace Vultr.API.Extensions
 
             HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             return httpResponse;
+        }
+
+        /// <summary>
+        /// Executes a Vultr API call and processes a JSON result.
+        /// </summary>
+        /// <typeparam name="T">The class type representing the expected JSON
+        /// result.</typeparam>
+        /// <param name="AccessPoint">The Vultr API endpoint to hit.</param>
+        /// <param name="ApiKey">The Vultr API key to use.</param>
+        /// <param name="Parameters">Parameters to send along with the request.</param>
+        /// <param name="Method">The type of request to make.</param>
+        /// <returns>The API call response alonside the converted JSON result as
+        /// <typeparamref name="T"/>.</returns>
+        /// <exception cref="HttpRequestException">If Vultr returns a bad status
+        /// code.</exception>
+        public static Tuple<HttpWebResponse, T> ApiExecute<T>(
+            string AccessPoint,
+            string ApiKey, List<KeyValuePair<string, object>> Parameters = null,
+            string Method = "GET")
+        {
+            var httpResponse = ApiExecute(
+                AccessPoint, ApiKey, Parameters, Method);
+
+            string content;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                content = streamReader.ReadToEnd();
+            }
+
+            if (httpResponse.StatusCode != HttpStatusCode.OK)
+            {
+                throw new HttpRequestException(
+                    string.Format("{0}: {1}", httpResponse.StatusCode, content));
+            }
+
+            return new Tuple<HttpWebResponse, T>(
+                httpResponse,
+                JsonConvert.DeserializeObject<T>(
+                    (content ?? "") == "[]" ? "{}" : content)
+            );
         }
 
         /// <summary>

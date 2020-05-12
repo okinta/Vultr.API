@@ -303,24 +303,10 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID)
             };
 
-            var httpResponse = Extensions.ApiClient.ApiExecute(
+            var response = Extensions.ApiClient.ApiExecute<CreateServer>(
                 "server/create", ApiKey, args, "POST");
-
-            string content;
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                content = streamReader.ReadToEnd();
-            }
-
-            if (httpResponse.StatusCode != HttpStatusCode.OK)
-            {
-                throw new HttpRequestException(
-                    string.Format("{0}: {1}", httpResponse.StatusCode, content));
-            }
-
-            var answer = JsonConvert.DeserializeObject<CreateServer>((content ?? "") == "[]" ? "{}" : content);
-
-            return new CreateServerResult() { ApiResponse = httpResponse, Server = answer };
+            return new CreateServerResult() {
+                ApiResponse = response.Item1, Server = response.Item2 };
         }
     }
 }

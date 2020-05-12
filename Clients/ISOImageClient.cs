@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Net;
 using System;
 using Vultr.API.Models.Responses;
-using Vultr.API.Exceptions;
-using System.Net.Http;
 
 namespace Vultr.API.Clients
 {
@@ -24,23 +23,11 @@ namespace Vultr.API.Clients
         /// <returns>List of all ISOs currently available on this account.</returns>
         public ISOImageResult GetISOImages()
         {
-            var httpResponse = Extensions.ApiClient.ApiExecute("iso/list", _ApiKey);
-            string content;
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                content = streamReader.ReadToEnd();
-            }
-
-            if (httpResponse.StatusCode != HttpStatusCode.OK)
-            {
-                throw new HttpRequestException(
-                    string.Format("{0}: {1}", httpResponse.StatusCode, content));
-            }
-
-            var answer = JsonConvert.DeserializeObject<Dictionary<string, ISOImage>>(
-                (content ?? "") == "[]" ? "{}" : content);
-
-            return new ISOImageResult() { ApiResponse = httpResponse, ISOImages = answer };
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, ISOImage>>(
+                "iso/list", _ApiKey);
+            return new ISOImageResult() {
+                ApiResponse = response.Item1, ISOImages = response.Item2
+            };
         }
         /// <summary>
         /// List public ISOs offered in the Vultr ISO library.
