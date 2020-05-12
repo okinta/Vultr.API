@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -24,11 +24,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("sshkey/list", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<string, SSHKey>>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<Dictionary<string, SSHKey>>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new SSHKeyResult() { ApiResponse = httpResponse, SSHKeys = answer };
@@ -42,18 +40,18 @@ namespace Vultr.API.Clients
         /// <returns>SSHKey element with only SSHKEYID.</returns>
         public SSHKeyCreateResult CreateSSHKey(string name, string ssh_key)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("name", name));
-            dict.Add(new KeyValuePair<string, object>("ssh_key", ssh_key));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("name", name),
+                new KeyValuePair<string, object>("ssh_key", ssh_key)
+            };
             var answer = new SSHKey();
             var httpResponse = Extensions.ApiClient.ApiExecute("sshkey/create", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<SSHKey>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<SSHKey>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new SSHKeyCreateResult() { ApiResponse = httpResponse, SSHKey = answer };
@@ -66,15 +64,15 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public SSHKeyDeleteResult DeleteSSHKey(string SSHKEYID)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SSHKEYID", SSHKEYID));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("SSHKEYID", SSHKEYID)
+            };
             var httpResponse = Extensions.ApiClient.ApiExecute("sshkey/destroy", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
             }
 
             return new SSHKeyDeleteResult() { ApiResponse = httpResponse };
@@ -87,17 +85,17 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public SSHKeyUpdateResult UpdateSSHKey(SSHKey SSHKey)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("name", SSHKey.name));
-            dict.Add(new KeyValuePair<string, object>("SSHKEYID", SSHKey.SSHKEYID));
-            dict.Add(new KeyValuePair<string, object>("ssh_key", SSHKey.ssh_key));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("name", SSHKey.Name),
+                new KeyValuePair<string, object>("SSHKEYID", SSHKey.SSHKeyID),
+                new KeyValuePair<string, object>("ssh_key", SSHKey.SSHKeyName)
+            };
             var httpResponse = Extensions.ApiClient.ApiExecute("sshkey/update", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
             }
 
             return new SSHKeyUpdateResult() { ApiResponse = httpResponse };

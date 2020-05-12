@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -55,11 +55,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("regions/availability?DCID=" + DCID + "&type=" + Type, _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new RegionAvailabilityResult() { ApiResponse = httpResponse, PlanIds = answer };
@@ -76,11 +74,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("regions/availability_baremetal?DCID=" + DCID, _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new RegionAvailabilityResult() { ApiResponse = httpResponse, PlanIds = answer };
@@ -98,11 +94,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("regions/availability_vc2?DCID=" + DCID, _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new RegionAvailabilityResult() { ApiResponse = httpResponse, PlanIds = answer };
@@ -119,11 +113,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("regions/availability_vdc2?DCID=" + DCID, _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new RegionAvailabilityResult() { ApiResponse = httpResponse, PlanIds = answer };

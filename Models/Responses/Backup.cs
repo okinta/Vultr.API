@@ -5,11 +5,11 @@ namespace Vultr.API.Models.Responses
 {
     public class Backup
     {
-        public string BACKUPID { get; set; }
-        public string date_created { get; set; }
-        public string description { get; set; }
-        public string size { get; set; }
-        public string status { get; set; }
+        public string ID { get; set; }
+        public string DateCreated { get; set; }
+        public string Description { get; set; }
+        public string Size { get; set; }
+        public string Status { get; set; }
     }
 
     public struct BackupResult
@@ -20,28 +20,33 @@ namespace Vultr.API.Models.Responses
 
     public class Schedule
     {
-        public bool enabled { get; set; }
+        public bool Enabled { get; set; }
+
         /// <summary>
         /// Backup cron type. Can be one of 'daily', 'weekly', 'monthly', 'daily_alt_even', or 'daily_alt_odd'.
         /// </summary>
         /// <returns></returns>
-        public string cron_type { get; set; }
-        public string next_scheduled_time_utc { get; set; }
+        public string CronType { get; set; }
+
+        public string NextScheduledTimeUTC { get; set; }
+
         /// <summary>
         /// Hour value (0-23). Applicable to crons: 'daily', 'weekly', 'monthly', 'daily_alt_even', 'daily_alt_odd'
         /// </summary>
         /// <returns></returns>
-        public Hour hour { get; set; }
+        public Hour Hour { get; set; }
+
         /// <summary>
         /// Day-of-week value (0-6). Applicable to crons: 'weekly'.
         /// </summary>
         /// <returns></returns>
-        public DOW dow { get; set; }
+        public DOW DOW { get; set; }
+
         /// <summary>
         /// Day-of-month value (1-28). Applicable to crons: 'monthly'.
         /// </summary>
         /// <returns></returns>
-        public DOM dom { get; set; }
+        public DOM DOM { get; set; }
     }
 
     public struct ScheduleResult
@@ -49,6 +54,7 @@ namespace Vultr.API.Models.Responses
         public Schedule Schedule { get; set; }
         public HttpWebResponse ApiResponse { get; set; }
     }
+
     /// <summary>
     /// Hour value (0-23). Applicable to crons: 'daily', 'weekly', 'monthly', 'daily_alt_even', 'daily_alt_odd'
     /// </summary>
@@ -80,6 +86,7 @@ namespace Vultr.API.Models.Responses
         HOUR23,
         HOUR24
     }
+
     /// <summary>
     /// Day-of-week value (0-6). Applicable to crons: 'weekly'.
     /// </summary>
@@ -93,6 +100,7 @@ namespace Vultr.API.Models.Responses
         Friday,
         Saturday
     }
+
     /// <summary>
     /// Day-of-month value (1-28). Applicable to crons: 'monthly'.
     /// </summary>

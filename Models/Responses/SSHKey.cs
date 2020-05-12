@@ -5,15 +5,19 @@ namespace Vultr.API.Models.Responses
 {
     public class SSHKey
     {
-        public string SSHKEYID { get; set; }
-        public object date_created { get; set; }
-        public string name { get; set; }
-        public string ssh_key { get; set; }
+        public string SSHKeyID { get; set; }
+
+        public object DateCreated { get; set; }
+
+        public string Name { get; set; }
+
+        public string SSHKeyName { get; set; }
     }
 
     public struct SSHKeyCreateResult
     {
         public SSHKey SSHKey { get; set; }
+
         public HttpWebResponse ApiResponse { get; set; }
     }
 
@@ -30,6 +34,7 @@ namespace Vultr.API.Models.Responses
     public struct SSHKeyResult
     {
         public Dictionary<string, SSHKey> SSHKeys { get; set; }
+
         public HttpWebResponse ApiResponse { get; set; }
     }
 }

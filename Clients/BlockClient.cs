@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Microsoft.VisualBasic;
+﻿using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -26,11 +26,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("block/list" + (Information.IsNothing(SUBID) ? "" : "?SUBID=" + SUBID), _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<List<Block>>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<List<Block>>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new BlockResult() { ApiResponse = httpResponse, Blocks = answer };
@@ -44,9 +42,11 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public BlockUpdateResult ResizeBlock(int SUBID, int size_gb)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SUBID", SUBID));
-            dict.Add(new KeyValuePair<string, object>("size_gb", size_gb));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("SUBID", SUBID),
+                new KeyValuePair<string, object>("size_gb", size_gb)
+            };
             var httpResponse = Extensions.ApiClient.ApiExecute("block/resize", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
@@ -73,10 +73,8 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("block/label_set", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
             }
 
             return new BlockUpdateResult() { ApiResponse = httpResponse };
@@ -91,18 +89,18 @@ namespace Vultr.API.Clients
         public BlockCreateResult CreateBlock(int DCID, Block Block)
         {
             var answer = new Block();
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("DCID", DCID));
-            dict.Add(new KeyValuePair<string, object>("size_gb", Block.size_gb));
-            dict.Add(new KeyValuePair<string, object>("label", Block.label));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("DCID", DCID),
+                new KeyValuePair<string, object>("size_gb", Block.SizeGB),
+                new KeyValuePair<string, object>("label", Block.Label)
+            };
             var httpResponse = Extensions.ApiClient.ApiExecute("block/create", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Block>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<Block>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new BlockCreateResult() { ApiResponse = httpResponse, Block = answer };
@@ -116,17 +114,16 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public BlockUpdateResult AttachBlock(int SUBID, int attach_to_SUBID)
         {
-            var answer = new Block();
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SUBID", SUBID));
-            dict.Add(new KeyValuePair<string, object>("attach_to_SUBID", attach_to_SUBID));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("SUBID", SUBID),
+                new KeyValuePair<string, object>("attach_to_SUBID", attach_to_SUBID)
+            };
             var httpResponse = Extensions.ApiClient.ApiExecute("block/attach", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
             }
 
             return new BlockUpdateResult() { ApiResponse = httpResponse };
@@ -139,16 +136,15 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public BlockUpdateResult DetachBlock(int SUBID)
         {
-            var answer = new Block();
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SUBID", SUBID));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("SUBID", SUBID)
+            };
             var httpResponse = Extensions.ApiClient.ApiExecute("block/detach", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
             }
 
             return new BlockUpdateResult() { ApiResponse = httpResponse };
@@ -161,16 +157,15 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public BlockUpdateResult DeleteBlock(int SUBID)
         {
-            var answer = new Block();
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SUBID", SUBID));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("SUBID", SUBID)
+            };
             var httpResponse = Extensions.ApiClient.ApiExecute("block/delete", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
             }
 
             return new BlockUpdateResult() { ApiResponse = httpResponse };

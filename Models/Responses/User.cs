@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Net;
 
 namespace Vultr.API.Models.Responses
@@ -7,23 +6,29 @@ namespace Vultr.API.Models.Responses
     public class User
     {
         public string USERID { get; set; }
-        public string name { get; set; }
-        public string password { get; set; }
-        public string email { get; set; }
-        [DefaultValue("yes")]
-        public string api_enabled { get; set; }
-        public acls[] acls { get; set; }
+
+        public string Name { get; set; }
+
+        public string Password { get; set; }
+
+        public string Email { get; set; }
+
+        public string ApiEnabled { get; set; } = "yes";
+
+        public Acls[] Acls { get; set; }
     }
 
     public struct UserResult
     {
         public List<User> Users { get; set; }
+
         public HttpWebResponse ApiResponse { get; set; }
     }
 
     public struct UserCreateResult
     {
         public User User { get; set; }
+
         public HttpWebResponse ApiResponse { get; set; }
     }
 
@@ -37,19 +42,19 @@ namespace Vultr.API.Models.Responses
         public HttpWebResponse ApiResponse { get; set; }
     }
 
-    public class acls
+    public class Acls
     {
-        private string Key;
-        public static readonly acls ManageUsers = new acls("manage_users");
-        public static readonly acls Subscriptions = new acls("subscriptions");
-        public static readonly acls Provisioning = new acls("provisioning");
-        public static readonly acls Billing = new acls("billing");
-        public static readonly acls Support = new acls("support");
-        public static readonly acls Abuse = new acls("abuse");
-        public static readonly acls Dns = new acls("dns");
-        public static readonly acls Upgrade = new acls("upgrade");
+        private readonly string Key;
+        public static readonly Acls ManageUsers = new Acls("manage_users");
+        public static readonly Acls Subscriptions = new Acls("subscriptions");
+        public static readonly Acls Provisioning = new Acls("provisioning");
+        public static readonly Acls Billing = new Acls("billing");
+        public static readonly Acls Support = new Acls("support");
+        public static readonly Acls Abuse = new Acls("abuse");
+        public static readonly Acls Dns = new Acls("dns");
+        public static readonly Acls Upgrade = new Acls("upgrade");
 
-        private acls(string key)
+        private Acls(string key)
         {
             Key = key;
         }

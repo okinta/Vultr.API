@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -54,11 +54,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("plans/list_baremetal", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<int, BareMetalPlan>>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<Dictionary<int, BareMetalPlan>>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new BareMetalPlanResult() { ApiResponse = httpResponse, Plans = answer };
@@ -74,11 +72,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("plans/list_vc2", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<int, VC2Plan>>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<Dictionary<int, VC2Plan>>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new VC2PlanResult() { ApiResponse = httpResponse, Plans = answer };
@@ -94,11 +90,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("plans/list_vdc2", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<int, VDC2Plan>>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<Dictionary<int, VDC2Plan>>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new VDC2PlanResult() { ApiResponse = httpResponse, Plans = answer };

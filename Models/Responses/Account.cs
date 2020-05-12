@@ -4,10 +4,10 @@ namespace Vultr.API.Models.Responses
 {
     public class Account
     {
-        public string balance { get; set; }
-        public string pending_charges { get; set; }
-        public string last_payment_date { get; set; }
-        public string last_payment_amount { get; set; }
+        public string Balance { get; set; }
+        public string PendingCharges { get; set; }
+        public string LastPaymentDate { get; set; }
+        public string LastPaymentAmount { get; set; }
     }
 
     public struct AccountResult

@@ -6,13 +6,13 @@ namespace Vultr.API.Models.Responses
     public class ISOImage
     {
         public int ISOID { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public string date_created { get; set; }
-        public string filename { get; set; }
-        public int size { get; set; }
-        public string md5sum { get; set; }
-        public string status { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string DateCreated { get; set; }
+        public string Filename { get; set; }
+        public int Size { get; set; }
+        public string MD5Sum { get; set; }
+        public string Status { get; set; }
     }
 
     public struct ISOImageCreateResult

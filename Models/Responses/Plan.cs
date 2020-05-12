@@ -6,16 +6,16 @@ namespace Vultr.API.Models.Responses
     public class Plan
     {
         public string VPSPLANID { get; set; }
-        public string name { get; set; }
-        public string vcpu_count { get; set; }
-        public string ram { get; set; }
-        public string disk { get; set; }
-        public string bandwidth { get; set; }
-        public string price_per_month { get; set; }
-        public bool windows { get; set; }
-        public string plan_type { get; set; }
-        public int[] available_locations { get; set; }
-        public bool deprecated { get; set; }
+        public string Name { get; set; }
+        public string VPUCcount { get; set; }
+        public string Ram { get; set; }
+        public string Disk { get; set; }
+        public string Bandwidth { get; set; }
+        public string PricePerMonth { get; set; }
+        public bool Windows { get; set; }
+        public string PlanType { get; set; }
+        public int[] AvailableLocations { get; set; }
+        public bool Deprecated { get; set; }
     }
 
     public struct PlanResult
@@ -27,15 +27,15 @@ namespace Vultr.API.Models.Responses
     public class BareMetalPlan
     {
         public string METALPLANID { get; set; }
-        public string name { get; set; }
-        public int cpu_count { get; set; }
-        public int ram { get; set; }
-        public string disk { get; set; }
-        public int bandwidth_tb { get; set; }
-        public int price_per_month { get; set; }
-        public string plan_type { get; set; }
-        public bool deprecated { get; set; }
-        public int[] available_locations { get; set; }
+        public string Name { get; set; }
+        public int CPUCount { get; set; }
+        public int Ram { get; set; }
+        public string Disk { get; set; }
+        public int BandwidthTB { get; set; }
+        public int PricepPerMonth { get; set; }
+        public string PlanType { get; set; }
+        public bool Deprecated { get; set; }
+        public int[] AvailableLocations { get; set; }
     }
 
     public struct BareMetalPlanResult
@@ -47,15 +47,15 @@ namespace Vultr.API.Models.Responses
     public class VC2Plan
     {
         public string VPSPLANID { get; set; }
-        public string name { get; set; }
-        public string vcpu_count { get; set; }
-        public string ram { get; set; }
-        public string disk { get; set; }
-        public string bandwidth { get; set; }
-        public string price_per_month { get; set; }
-        public string plan_type { get; set; }
-        public bool deprecated { get; set; }
-        public int[] available_locations { get; set; }
+        public string Name { get; set; }
+        public string VCPUCount { get; set; }
+        public string Ram { get; set; }
+        public string Disk { get; set; }
+        public string Bandwidth { get; set; }
+        public string PricePerMonth { get; set; }
+        public string PlanType { get; set; }
+        public bool Deprecated { get; set; }
+        public int[] AvailableLocations { get; set; }
     }
 
     public struct VC2PlanResult
@@ -67,15 +67,15 @@ namespace Vultr.API.Models.Responses
     public class VDC2Plan
     {
         public string VPSPLANID { get; set; }
-        public string name { get; set; }
-        public string vcpu_count { get; set; }
-        public string ram { get; set; }
-        public string disk { get; set; }
-        public string bandwidth { get; set; }
-        public string price_per_month { get; set; }
-        public string plan_type { get; set; }
-        public bool deprecated { get; set; }
-        public int[] available_locations { get; set; }
+        public string Name { get; set; }
+        public string VCPUCount { get; set; }
+        public string Ram { get; set; }
+        public string Disk { get; set; }
+        public string Bandwidth { get; set; }
+        public string PricePerMonth { get; set; }
+        public string PlanType { get; set; }
+        public bool Deprecated { get; set; }
+        public int[] AvailableLocations { get; set; }
     }
 
     public struct VDC2PlanResult

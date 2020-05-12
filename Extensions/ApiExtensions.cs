@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Vultr.API.Extensions
 {
@@ -13,7 +11,7 @@ namespace Vultr.API.Extensions
         public static HttpWebResponse ApiExecute(string AccessPoint, string ApiKey, List<KeyValuePair<string, object>> Parameters = null, string Method = "GET")
         {
             ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)Conversions.ToInteger(3072);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             ServicePointManager.DefaultConnectionLimit = 9999;
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(VultrApiUrl + AccessPoint);
             httpWebRequest.UserAgent = "VultrAPI.Net";
@@ -26,13 +24,13 @@ namespace Vultr.API.Extensions
 
             if ((Method ?? "") == "GET")
             {
-                if (Information.IsNothing(Parameters) == false)
+                if (Parameters != null)
                 {
                     foreach (KeyValuePair<string, object> pair in Parameters)
-                        httpWebRequest.Headers.Add(pair.Key, Conversions.ToString(pair.Value));
+                        httpWebRequest.Headers.Add(pair.Key, (string)pair.Value);
                 }
             }
-            else if (Information.IsNothing(Parameters) == false)
+            else if (Parameters != null)
             {
                 string postData = "";
                 foreach (KeyValuePair<string, object> pair in Parameters)

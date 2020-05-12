@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Vultr.API.Exceptions
 {
@@ -26,7 +25,7 @@ namespace Vultr.API.Exceptions
         {
             get
             {
-                return _errors.ContainsKey(Conversions.ToInteger(StatusCode)) ? _errors[Conversions.ToInteger(StatusCode)] : "Unknown API error";
+                return _errors.ContainsKey((int)StatusCode) ? _errors[(int)StatusCode] : "Unknown API error";
             }
         }
     }

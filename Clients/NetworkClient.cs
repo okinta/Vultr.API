@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -24,11 +24,9 @@ namespace Vultr.API.Clients
             var httpResponse = Extensions.ApiClient.ApiExecute("network/list", _ApiKey);
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<string, Network>>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<Dictionary<string, Network>>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new NetworkResult() { ApiResponse = httpResponse, Networks = answer };
@@ -40,20 +38,20 @@ namespace Vultr.API.Clients
         /// <returns>Network element with only NETWORKID.</returns>
         public NetworkCreateResult CreateNetwork(Network Network)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("DCID", Network.DCID));
-            dict.Add(new KeyValuePair<string, object>("description", Network.description));
-            dict.Add(new KeyValuePair<string, object>("v4_subnet", Network.v4_subnet));
-            dict.Add(new KeyValuePair<string, object>("v4_subnet_mask", Network.v4_subnet_mask));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("DCID", Network.DCID),
+                new KeyValuePair<string, object>("description", Network.Description),
+                new KeyValuePair<string, object>("v4_subnet", Network.V4Subnet),
+                new KeyValuePair<string, object>("v4_subnet_mask", Network.V4SubnetMask)
+            };
             var answer = new Network();
             var httpResponse = Extensions.ApiClient.ApiExecute("network/create", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Network>((st ?? "") == "[]" ? "{}" : st);
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
+                answer = JsonConvert.DeserializeObject<Network>((st ?? "") == "[]" ? "{}" : st);
             }
 
             return new NetworkCreateResult() { ApiResponse = httpResponse, Network = answer };
@@ -66,15 +64,15 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public NetworkDeleteResult DeleteNetwork(string NetworkId)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("NETWORKID", NetworkId));
+            var dict = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("NETWORKID", NetworkId)
+            };
             var httpResponse = Extensions.ApiClient.ApiExecute("network/destroy", _ApiKey, dict, "POST");
             if ((int)httpResponse.StatusCode == 200)
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
+                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                string st = streamReader.ReadToEnd();
             }
 
             return new NetworkDeleteResult() { ApiResponse = httpResponse };
