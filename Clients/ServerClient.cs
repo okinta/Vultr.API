@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
+using System.Net;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -197,19 +199,25 @@ namespace Vultr.API.Clients
         /// Create a new virtual machine. You will start being billed for this immediately. The response only contains the SUBID for the new machine. You should use v1/server/list to poll and wait for the machine to be created (as this does not happen instantly). In order to create a server using a snapshot, use OSID 164 and specify a SNAPSHOTID. Similarly, to create a server using an ISO use OSID 159 and specify an ISOID.
         /// </summary>
         /// <returns>List of active or panding servers.</returns>
-        public ServerResult CreateServer()
+        public CreateServerResult CreateServer()
         {
-            var answer = new Dictionary<string, Server>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("server/list", ApiKey);
+            var httpResponse = Extensions.ApiClient.ApiExecute("server/create", ApiKey);
 
-            if ((int)httpResponse.StatusCode == 200)
+            string content;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Dictionary<string, Server>>((st ?? "") == "[]" ? "{}" : st);
+                content = streamReader.ReadToEnd();
             }
 
-            return new ServerResult() { ApiResponse = httpResponse, Servers = answer };
+            if (httpResponse.StatusCode != HttpStatusCode.OK)
+            {
+                throw new HttpRequestException(
+                    string.Format("{0}: {1}", httpResponse.StatusCode, content));
+            }
+
+            var answer = JsonConvert.DeserializeObject<CreateServer>((content ?? "") == "[]" ? "{}" : content);
+
+            return new CreateServerResult() { ApiResponse = httpResponse, Server = answer };
         }
     }
 }

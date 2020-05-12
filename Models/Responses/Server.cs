@@ -39,6 +39,11 @@ namespace Vultr.API.Models.Responses
         public string FIREWALLGROUPID { get; set; }
     }
 
+    public class CreateServer
+    {
+        public string SUBID { get; set; }
+    }
+
     public class BandWidth
     {
         public string[][] incoming_bytes { get; set; }
@@ -61,6 +66,12 @@ namespace Vultr.API.Models.Responses
     public struct ServerResult
     {
         public Dictionary<string, Server> Servers { get; set; }
+        public HttpWebResponse ApiResponse { get; set; }
+    }
+
+    public struct CreateServerResult
+    {
+        public CreateServer Server { get; set; }
         public HttpWebResponse ApiResponse { get; set; }
     }
 }
