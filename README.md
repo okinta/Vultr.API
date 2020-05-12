@@ -19,21 +19,11 @@ Forked from https://github.com/koraykaraman/Vultr.API
 C#
 ```csharp
 
-VultrClient Client = new VultrClient("YOUR-API-KEY-FROM-Vultr.com");
-AccountResult Account = Client.Account.GetInfo();
-ApplicationResult Applications = Client.Application.GetApplications();
-BackupResult Backups = Client.Backup.GetBackups();
-ServerResult Servers = Client.Server.GetServers();
+var client = new VultrClient("YOUR-API-KEY-FROM-Vultr.com");
+var account = client.Account.GetInfo();
+var applications = client.Application.GetApplications();
+var backups = client.Backup.GetBackups();
+var servers = client.Server.GetServers();
 
 ```
 
-VB.NET
-```vb
-
-Dim Client As VultrClient = New VultrClient("YOUR-API-KEY-FROM-Vultr.com")
-Dim Account As AccountResult = Client.Account.GetInfo()
-Dim Applications As ApplicationResult = Client.Application.GetApplications()
-Dim Backups As BackupResult = Client.Backup.GetBackups()
-Dim Servers As ServerResult = Client.Server.GetServers()
-
-```
