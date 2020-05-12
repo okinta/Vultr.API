@@ -1,24 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Vultr.API.Extensions
 {
     public class ApiClient
     {
-        public static readonly string VultrApiUrl = "https://api.vultr.com/v1/";
+        public const string VultrApiUrl = "https://api.vultr.com/v1/";
+        public const int ConnectionLimit = 100;
 
-        public static HttpWebResponse ApiExecute(string AccessPoint, string ApiKey, List<KeyValuePair<string, object>> Parameters = null, string Method = "GET")
+        /// <summary>
+        /// Executes a Vultr API call.
+        /// </summary>
+        /// <param name="AccessPoint">The Vultr API endpoint to hit.</param>
+        /// <param name="ApiKey">The Vultr API key to use.</param>
+        /// <param name="Parameters">Parameters to send along with the request.</param>
+        /// <param name="Method">The type of request to make.</param>
+        /// <returns>The API call response.</returns>
+        public static HttpWebResponse ApiExecute(
+            string AccessPoint,
+            string ApiKey, List<KeyValuePair<string, object>> Parameters = null,
+            string Method = "GET")
         {
             ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)Conversions.ToInteger(3072);
-            ServicePointManager.DefaultConnectionLimit = 9999;
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(VultrApiUrl + AccessPoint);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.DefaultConnectionLimit = ConnectionLimit;
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(
+                VultrApiUrl + AccessPoint);
             httpWebRequest.UserAgent = "VultrAPI.Net";
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = Method;
+
             if (string.IsNullOrWhiteSpace(ApiKey) == false)
             {
                 httpWebRequest.Headers.Add("API-Key", ApiKey);
@@ -26,21 +40,34 @@ namespace Vultr.API.Extensions
 
             if ((Method ?? "") == "GET")
             {
-                if (Information.IsNothing(Parameters) == false)
+                if (Parameters != null)
                 {
-                    foreach (KeyValuePair<string, object> pair in Parameters)
-                        httpWebRequest.Headers.Add(pair.Key, Conversions.ToString(pair.Value));
+                    foreach (var pair in Parameters)
+                    {
+                        if (pair.Value != null)
+                        {
+                            httpWebRequest.Headers.Add(pair.Key, Convert(pair.Value));
+                        }
+                    }
                 }
             }
-            else if (Information.IsNothing(Parameters) == false)
+            else if (Parameters != null)
             {
-                string postData = "";
-                foreach (KeyValuePair<string, object> pair in Parameters)
-                    postData += (string.IsNullOrEmpty(postData) ? "" : "&") + pair.Key + "=" + pair.Value;
+                var paramStrings = new List<string>();
+                foreach (var pair in Parameters)
+                {
+                    if (pair.Value != null)
+                    {
+                        paramStrings.Add(Convert(pair.Value));
+                    }
+                }
+
+                var postData = string.Join('&', paramStrings);
                 var encoding = new UTF8Encoding();
                 var byteData = encoding.GetBytes(postData);
                 httpWebRequest.ContentType = "application/x-www-form-urlencoded";
                 httpWebRequest.ContentLength = byteData.Length;
+
                 var postreqstream = httpWebRequest.GetRequestStream();
                 postreqstream.Write(byteData, 0, byteData.Length);
                 postreqstream.Close();
@@ -48,6 +75,27 @@ namespace Vultr.API.Extensions
 
             HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             return httpResponse;
+        }
+
+        /// <summary>
+        /// Converts the given value to something Vultr API can understand.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        private static string Convert(object value)
+        {
+            if (value.GetType() == typeof(bool))
+            {
+                return (bool)value ? "yes" : "no";
+            }
+
+            if (value.GetType() == typeof(string) || value.GetType() == typeof(int))
+            {
+                return value.ToString();
+            }
+
+            throw new ArgumentException(
+                string.Format("unknown type: {0}", value), "value");
         }
     }
 }
