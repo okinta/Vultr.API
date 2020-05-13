@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Web;
 using Newtonsoft.Json;
 
 namespace Vultr.API.Extensions
@@ -47,9 +48,10 @@ namespace Vultr.API.Extensions
                 {
                     foreach (var pair in Parameters)
                     {
-                        if (pair.Value != null)
+                        var value = Convert(pair.Value);
+                        if (!string.IsNullOrEmpty(value))
                         {
-                            httpWebRequest.Headers.Add(pair.Key, Convert(pair.Value));
+                            httpWebRequest.Headers.Add(pair.Key, value);
                         }
                     }
                 }
@@ -59,9 +61,10 @@ namespace Vultr.API.Extensions
                 var paramStrings = new List<string>();
                 foreach (var pair in Parameters)
                 {
-                    if (pair.Value != null)
+                    var value = Convert(pair.Value);
+                    if (!string.IsNullOrEmpty(value))
                     {
-                        paramStrings.Add(Convert(pair.Value));
+                        paramStrings.Add(value);
                     }
                 }
 
@@ -127,6 +130,11 @@ namespace Vultr.API.Extensions
         /// <returns>The converted value.</returns>
         private static string Convert(object value)
         {
+            if (value is null)
+            {
+                return "";
+            }
+
             if (value.GetType() == typeof(bool))
             {
                 return (bool)value ? "yes" : "no";
@@ -134,7 +142,7 @@ namespace Vultr.API.Extensions
 
             if (value.GetType() == typeof(string) || value.GetType() == typeof(int))
             {
-                return value.ToString();
+                return HttpUtility.UrlEncode(value.ToString());
             }
 
             throw new ArgumentException(
