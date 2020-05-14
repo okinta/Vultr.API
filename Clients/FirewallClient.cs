@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -15,7 +14,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all firewall groups on the current account.</returns>
         public FirewallGroupResult GetFirewallGroups()
         {
-            var response = ApiClient.ApiExecute<
+            var response = ApiExecute<
                 Dictionary<string, FirewallGroup>>("firewall/group_list", ApiKey);
             return new FirewallGroupResult()
             {
@@ -36,7 +35,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("description", description)
             };
 
-            var response = ApiClient.ApiExecute<FirewallGroup>(
+            var response = ApiExecute<FirewallGroup>(
                 "firewall/group_create", ApiKey, args, ApiMethod.POST);
             return new FirewallGroupCreateResult()
             {
@@ -57,7 +56,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID)
             };
 
-            var response = ApiClient.ApiExecute<FirewallGroup>(
+            var response = ApiExecute<FirewallGroup>(
                 "firewall/group_delete", ApiKey, args, ApiMethod.POST);
             return new FirewallGroupDeleteResult()
             {
@@ -79,7 +78,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID)
             };
 
-            var response = ApiClient.ApiExecute<FirewallGroup>(
+            var response = ApiExecute<FirewallGroup>(
                 "firewall/group_set_description", ApiKey, args, ApiMethod.POST);
             return new FirewallGroupUpdateResult()
             {
@@ -105,7 +104,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("ip_type", ip_type),
             };
 
-            var response = ApiClient.ApiExecute<
+            var response = ApiExecute<
                 Dictionary<string, FirewallRule>>("firewall/rule_list", ApiKey, args);
             return new FirewallRuleResult()
             {
@@ -132,7 +131,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("subnet_size", FirewallRule.subnet_size)
             };
 
-            var response = ApiClient.ApiExecute<FirewallRule>(
+            var response = ApiExecute<FirewallRule>(
                 "firewall/rule_create", ApiKey, args, ApiMethod.POST);
             return new FirewallRuleCreateResult()
             {
@@ -156,7 +155,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("rulenumber", rulenumber)
             };
 
-            var response = ApiClient.ApiExecute<FirewallRule>(
+            var response = ApiExecute<FirewallRule>(
                 "firewall/rule_delete", ApiKey, args, ApiMethod.POST);
             return new FirewallRuleDeleteResult()
             {

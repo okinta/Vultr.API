@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -18,7 +17,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all startup scripts on the current account.</returns>
         public StartupScriptResult GetStartupScripts()
         {
-            var response = ApiClient.ApiExecute<
+            var response = ApiExecute<
                 Dictionary<string, StartupScript>>("startupscript/list", ApiKey);
             return new StartupScriptResult()
             {
@@ -44,7 +43,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("type", type.ToString())
             };
 
-            var response = ApiClient.ApiExecute<StartupScript>(
+            var response = ApiExecute<StartupScript>(
                 "startupscript/create", ApiKey, args, ApiMethod.POST);
             return new StartupScriptCreateResult()
             {
@@ -66,7 +65,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SCRIPTID", SCRIPTID)
             };
 
-            var response = ApiClient.ApiExecute<StartupScript>(
+            var response = ApiExecute<StartupScript>(
                 "startupscript/destroy", ApiKey, args, ApiMethod.POST);
             return response.Item1;
         }
@@ -89,7 +88,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("script", script)
             };
 
-            var response = ApiClient.ApiExecute<StartupScript>(
+            var response = ApiExecute<StartupScript>(
                 "startupscript/update", ApiKey, args, ApiMethod.POST);
             return response.Item1;
         }

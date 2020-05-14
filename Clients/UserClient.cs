@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -16,7 +15,7 @@ namespace Vultr.API.Clients
         /// <returns>List of active Users.</returns>
         public UserResult GetUsers()
         {
-            var response = ApiClient.ApiExecute<List<User>>(
+            var response = ApiExecute<List<User>>(
                 "user/list", ApiKey);
             return new UserResult()
             {
@@ -43,7 +42,7 @@ namespace Vultr.API.Clients
             for (int i = 0, loopTo = User.acls.Count() - 1; i <= loopTo; i++)
                 args.Add(new KeyValuePair<string, object>("acls[]", User.acls[i]));
 
-            var response = ApiClient.ApiExecute<User>(
+            var response = ApiExecute<User>(
                 "user/create", ApiKey, args, ApiMethod.POST);
             return new UserCreateResult()
             {
@@ -71,7 +70,7 @@ namespace Vultr.API.Clients
             for (int i = 0, loopTo = User.acls.Count() - 1; i <= loopTo; i++)
                 args.Add(new KeyValuePair<string, object>("acls[]", User.acls[i]));
 
-            var response = ApiClient.ApiExecute<User>(
+            var response = ApiExecute<User>(
                 "user/update", ApiKey, args, ApiMethod.POST);
             return new UserUpdateResult()
             {
@@ -92,7 +91,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("USERID", USERID)
             };
 
-            var response = ApiClient.ApiExecute<User>(
+            var response = ApiExecute<User>(
                 "user/delete", ApiKey, args, ApiMethod.POST);
             return new UserDeleteResult()
             {

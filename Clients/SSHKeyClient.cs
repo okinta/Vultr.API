@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -15,7 +14,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all the SSH keys on the current account.</returns>
         public SSHKeyResult GetSSHKeys()
         {
-            var response = ApiClient.ApiExecute<Dictionary<string, SSHKey>>(
+            var response = ApiExecute<Dictionary<string, SSHKey>>(
                    "sshkey/list", ApiKey);
             return new SSHKeyResult()
             {
@@ -38,7 +37,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("ssh_key", ssh_key)
             };
 
-            var response = ApiClient.ApiExecute<SSHKey>(
+            var response = ApiExecute<SSHKey>(
                 "sshkey/create", ApiKey, args, ApiMethod.POST);
             return new SSHKeyCreateResult()
             {
@@ -59,7 +58,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SSHKEYID", SSHKEYID)
             };
 
-            var response = ApiClient.ApiExecute<SSHKey>(
+            var response = ApiExecute<SSHKey>(
                 "sshkey/destroy", ApiKey, args, ApiMethod.POST);
             return new SSHKeyDeleteResult()
             {
@@ -81,7 +80,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("ssh_key", SSHKey.ssh_key)
             };
 
-            var response = ApiClient.ApiExecute<SSHKey>(
+            var response = ApiExecute<SSHKey>(
                 "sshkey/update", ApiKey, args, ApiMethod.POST);
             return new SSHKeyUpdateResult()
             {

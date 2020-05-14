@@ -1,5 +1,4 @@
-﻿using Vultr.API.Extensions;
-using Vultr.API.Models;
+﻿using Vultr.API.Models;
 using Vultr.Clients;
 
 namespace Vultr.API.Clients
@@ -14,7 +13,7 @@ namespace Vultr.API.Clients
         /// <returns>Returns API key details and HTTP API Respopnse.</returns>
         public AuthResult GetInfo()
         {
-            var response = ApiClient.ApiExecute<Auth>(
+            var response = ApiExecute<Auth>(
                 "auth/info", ApiKey);
             return new AuthResult()
             {

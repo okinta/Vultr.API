@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -21,7 +20,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SUBID", SUBID)
             };
 
-            var response = ApiClient.ApiExecute<List<Block>>(
+            var response = ApiExecute<List<Block>>(
                 "block/list", ApiKey, args);
             return new BlockResult()
             {
@@ -44,7 +43,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("size_gb", size_gb)
             };
 
-            var response = ApiClient.ApiExecute<Block>(
+            var response = ApiExecute<Block>(
                 "block/resize", ApiKey, args, ApiMethod.POST);
             return new BlockUpdateResult()
             {
@@ -66,7 +65,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("label", label)
             };
 
-            var response = ApiClient.ApiExecute<Block>(
+            var response = ApiExecute<Block>(
                 "block/label_set", ApiKey, args, ApiMethod.POST);
             return new BlockUpdateResult()
             {
@@ -89,7 +88,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("label", Block.label)
             };
 
-            var response = ApiClient.ApiExecute<Block>(
+            var response = ApiExecute<Block>(
                 "block/create", ApiKey, args, ApiMethod.POST);
             return new BlockCreateResult()
             {
@@ -112,7 +111,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("attach_to_SUBID", attach_to_SUBID)
             };
 
-            var response = ApiClient.ApiExecute<Block>(
+            var response = ApiExecute<Block>(
                 "block/update", ApiKey, args, ApiMethod.POST);
             return new BlockUpdateResult()
             {
@@ -132,7 +131,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SUBID", SUBID)
             };
 
-            var response = ApiClient.ApiExecute<Block>(
+            var response = ApiExecute<Block>(
                 "block/detach", ApiKey, args, ApiMethod.POST);
             return new BlockUpdateResult()
             {
@@ -152,7 +151,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SUBID", SUBID)
             };
 
-            var response = ApiClient.ApiExecute<Block>(
+            var response = ApiExecute<Block>(
                 "server/create", ApiKey, args, ApiMethod.POST);
             return new BlockUpdateResult()
             {

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using Newtonsoft.Json.Linq;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -17,7 +16,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all domains associated with the current account.</returns>
         public DomainResult GetDomains()
         {
-            var response = ApiClient.ApiExecute<List<Domain>>(
+            var response = ApiExecute<List<Domain>>(
                 "dns/list", ApiKey);
             return new DomainResult()
             {
@@ -38,7 +37,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("domain", domain)
             };
 
-            var response = ApiClient.ApiExecute<List<Record>>(
+            var response = ApiExecute<List<Record>>(
                 "dns/records", ApiKey, args);
             return new RecordResult()
             {
@@ -61,7 +60,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("serverip", serverip.ToString())
             };
 
-            var response = ApiClient.ApiExecute<Domain>(
+            var response = ApiExecute<Domain>(
                 "dns/create_domain", ApiKey, args, ApiMethod.POST);
             return new DomainCreateResult()
             {
@@ -87,7 +86,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("priority", Record.priority)
             };
 
-            var response = ApiClient.ApiExecute<Record>(
+            var response = ApiExecute<Record>(
                 "dns/create_record", ApiKey, args, ApiMethod.POST);
             return new DomainCreateResult()
             {
@@ -107,7 +106,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("domain", domain)
             };
 
-            var response = ApiClient.ApiExecute<Domain>(
+            var response = ApiExecute<Domain>(
                 "dns/delete_domain", ApiKey, args, ApiMethod.POST);
             return new DomainDeleteResult()
             {
@@ -129,7 +128,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("RECORDID", RECORDID)
             };
 
-            var response = ApiClient.ApiExecute<Record>(
+            var response = ApiExecute<Record>(
                 "dns/delete_record", ApiKey, args, ApiMethod.POST);
             return new RecordDeleteResult()
             {
@@ -150,7 +149,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("enable", "yes")
             };
 
-            var response = ApiClient.ApiExecute<Domain>(
+            var response = ApiExecute<Domain>(
                 "dns/dnssec_enable", ApiKey, args, ApiMethod.POST);
             return new DomainUpdateResult()
             {
@@ -170,7 +169,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("domain", domain)
             };
 
-            var response = ApiClient.ApiExecute<JArray>(
+            var response = ApiExecute<JArray>(
                 "dns/dnssec_info", ApiKey, args);
             return new DNSSECKeyResult()
             {
@@ -191,7 +190,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("domain", domain)
             };
 
-            var response = ApiClient.ApiExecute<SOARecord>(
+            var response = ApiExecute<SOARecord>(
                 "dns/soa_info", ApiKey, args);
             return new SOAInfoResult()
             {
@@ -215,7 +214,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("email", SOARecord.email)
             };
 
-            var response = ApiClient.ApiExecute<Record>(
+            var response = ApiExecute<Record>(
                 "dns/soa_update", ApiKey, args, ApiMethod.POST);
             return new DomainUpdateResult()
             {
@@ -242,7 +241,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("priority", Record.priority)
             };
 
-            var response = ApiClient.ApiExecute<Record>(
+            var response = ApiExecute<Record>(
                 "dns/update_record", ApiKey, args, ApiMethod.POST);
             return new DomainUpdateResult()
             {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -16,7 +15,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all ISOs currently available on this account.</returns>
         public ISOImageResult GetISOImages()
         {
-            var response = ApiClient.ApiExecute<Dictionary<string, ISOImage>>(
+            var response = ApiExecute<Dictionary<string, ISOImage>>(
                 "iso/list", ApiKey);
             return new ISOImageResult() {
                 ApiResponse = response.Item1, ISOImages = response.Item2
@@ -28,7 +27,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all public ISOs offered in the Vultr ISO library.</returns>
         public ISOImageResult GetPublicISOImages()
         {
-            var response = ApiClient.ApiExecute<Dictionary<string, ISOImage>>(
+            var response = ApiExecute<Dictionary<string, ISOImage>>(
                 "iso/list_public", ApiKey);
             return new ISOImageResult()
             {
@@ -49,7 +48,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("url", URL.AbsoluteUri)
             };
 
-            var response = ApiClient.ApiExecute<ISOImage>(
+            var response = ApiExecute<ISOImage>(
                 "iso/create_from_url", ApiKey, args, ApiMethod.POST);
             return new ISOImageCreateResult()
             {

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -15,7 +14,7 @@ namespace Vultr.API.Clients
         /// <returns>List of active or panding servers.</returns>
         public ServerResult GetServers()
         {
-            var response = ApiClient.ApiExecute<Dictionary<string, Server>>(
+            var response = ApiExecute<Dictionary<string, Server>>(
                 "server/list", ApiKey);
             return new ServerResult()
             {
@@ -38,7 +37,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("APPID", AppId)
             };
 
-            var response = ApiClient.ApiExecute<Dictionary<string, Server>>(
+            var response = ApiExecute<Dictionary<string, Server>>(
                 "server/app_change", ApiKey, args, ApiMethod.POST);
             return new ServerResult()
             {
@@ -59,7 +58,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SUBID", SubId)
             };
 
-            var response = ApiClient.ApiExecute<Dictionary<string, Application>>(
+            var response = ApiExecute<Dictionary<string, Application>>(
                 "server/app_change", ApiKey, args, ApiMethod.POST);
             return new ApplicationResult()
             {
@@ -80,7 +79,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SUBID", SubId)
             };
 
-            var response = ApiClient.ApiExecute<Dictionary<string, Backup>>(
+            var response = ApiExecute<Dictionary<string, Backup>>(
                 "server/backup_disable", ApiKey, args, ApiMethod.POST);
             return new BackupResult()
             {
@@ -101,7 +100,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SUBID", SubId)
             };
 
-            var response = ApiClient.ApiExecute<Dictionary<string, Backup>>(
+            var response = ApiExecute<Dictionary<string, Backup>>(
                 "server/backup_enable", ApiKey, args, ApiMethod.POST);
             return new BackupResult()
             {
@@ -122,7 +121,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SUBID", SubId)
             };
 
-            var response = ApiClient.ApiExecute<Schedule>(
+            var response = ApiExecute<Schedule>(
                 "server/backup_get_schedule", ApiKey, args, ApiMethod.POST);
             return new ScheduleResult()
             {
@@ -148,7 +147,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("dom", Schedule.dom)
             };
 
-            var response = ApiClient.ApiExecute<Schedule>(
+            var response = ApiExecute<Schedule>(
                 "server/backup_get_schedule", ApiKey, args, ApiMethod.POST);
             return new ScheduleResult()
             {
@@ -169,7 +168,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SUBID", SubId)
             };
 
-            var response = ApiClient.ApiExecute<BandWidth>(
+            var response = ApiExecute<BandWidth>(
                 "server/backup_get_schedule", ApiKey, args, ApiMethod.POST);
             return new BandwidthResult()
             {
@@ -282,7 +281,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID)
             };
 
-            var response = ApiClient.ApiExecute<CreateServer>(
+            var response = ApiExecute<CreateServer>(
                 "server/create", ApiKey, args, ApiMethod.POST);
             return new CreateServerResult() {
                 ApiResponse = response.Item1, Server = response.Item2 };

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -15,7 +14,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all the active reserved IPs on this account.</returns>
         public ReservedIPResult GetReservedIPs()
         {
-            var response = ApiClient.ApiExecute<Dictionary<string, ReservedIP>>(
+            var response = ApiExecute<Dictionary<string, ReservedIP>>(
                 "reservedip/list", ApiKey);
             return new ReservedIPResult()
             {
@@ -40,7 +39,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("label", label)
             };
 
-            var response = ApiClient.ApiExecute<ReservedIP>(
+            var response = ApiExecute<ReservedIP>(
                 "reservedip/create", ApiKey, args, ApiMethod.POST);
             return new ReservedIPCreateResult()
             {
@@ -65,7 +64,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("label", label)
             };
 
-            var response = ApiClient.ApiExecute<ReservedIP>(
+            var response = ApiExecute<ReservedIP>(
                 "reservedip/convert", ApiKey, args, ApiMethod.POST);
             return new ReservedIPConvertResult()
             {
@@ -88,7 +87,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("ip_address", ip_address)
             };
 
-            var response = ApiClient.ApiExecute<ReservedIP>(
+            var response = ApiExecute<ReservedIP>(
                 "reservedip/attach", ApiKey, args, ApiMethod.POST);
             return new ReservedIPUpdateResult()
             {
@@ -110,7 +109,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("ip_address", ip_address)
             };
 
-            var response = ApiClient.ApiExecute<ReservedIP>(
+            var response = ApiExecute<ReservedIP>(
                 "reservedip/detach", ApiKey, args, ApiMethod.POST);
             return new ReservedIPUpdateResult()
             {
@@ -130,7 +129,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("ip_address", ip_address)
             };
 
-            var response = ApiClient.ApiExecute<ReservedIP>(
+            var response = ApiExecute<ReservedIP>(
                 "reservedip/destroy", ApiKey, args, ApiMethod.POST);
             return new ReservedIPUpdateResult()
             {

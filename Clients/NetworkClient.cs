@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -15,7 +14,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all private networks on the current account.</returns>
         public NetworkResult GetNetworks()
         {
-            var response = ApiClient.ApiExecute<Dictionary<string, Network>>(
+            var response = ApiExecute<Dictionary<string, Network>>(
                 "network/list", ApiKey);
             return new NetworkResult()
             {
@@ -38,7 +37,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("v4_subnet_mask", Network.v4_subnet_mask)
             };
 
-            var response = ApiClient.ApiExecute<Network>(
+            var response = ApiExecute<Network>(
                 "network/create", ApiKey, args, ApiMethod.POST);
             return new NetworkCreateResult()
             {
@@ -59,7 +58,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("NETWORKID", NetworkId)
             };
 
-            var response = ApiClient.ApiExecute<Network>(
+            var response = ApiExecute<Network>(
                 "network/destroy", ApiKey, args, ApiMethod.POST);
             return new NetworkDeleteResult()
             {

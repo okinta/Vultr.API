@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -15,7 +14,7 @@ namespace Vultr.API.Clients
         /// <returns>Returns backup list and HTTP API Respopnse.</returns>
         public BackupResult GetBackups()
         {
-            var response = ApiClient.ApiExecute<Dictionary<string, Backup>>(
+            var response = ApiExecute<Dictionary<string, Backup>>(
                 "backup/list", ApiKey);
             return new BackupResult()
             {
@@ -36,7 +35,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("BACKUPID", BackupId)
             };
 
-            var response = ApiClient.ApiExecute<Dictionary<string, Backup>>(
+            var response = ApiExecute<Dictionary<string, Backup>>(
                 "backup/list", ApiKey, args);
             return new BackupResult()
             {
@@ -57,7 +56,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SUBID", SubId)
             };
 
-            var response = ApiClient.ApiExecute<Dictionary<string, Backup>>(
+            var response = ApiExecute<Dictionary<string, Backup>>(
                 "backup/list", ApiKey, args, ApiMethod.POST);
             return new BackupResult()
             {

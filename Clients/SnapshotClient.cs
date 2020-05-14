@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vultr.API.Extensions;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -15,7 +14,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all snapshots on the current account.</returns>
         public SnapshotResult GetSnapshots()
         {
-            var response = ApiClient.ApiExecute<Dictionary<string, Snapshot>>(
+            var response = ApiExecute<Dictionary<string, Snapshot>>(
                 "snapshot/list", ApiKey);
             return new SnapshotResult()
             {
@@ -38,7 +37,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("description", Description)
             };
 
-            var response = ApiClient.ApiExecute<Snapshot>(
+            var response = ApiExecute<Snapshot>(
                 "snapshot/create", ApiKey, args, ApiMethod.POST);
             return new SnapshotCreateResult()
             {
@@ -59,7 +58,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SNAPSHOTID", SNAPSHOTID)
             };
 
-            var response = ApiClient.ApiExecute<Snapshot>(
+            var response = ApiExecute<Snapshot>(
                 "snapshot/destroy", ApiKey, args, ApiMethod.POST);
             return new SnapshotDeleteResult()
             {
