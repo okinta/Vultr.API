@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vultr.API.Extensions;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -30,7 +31,7 @@ namespace Vultr.API.Clients
                 args.Add(new KeyValuePair<string, object>("type", "all"));
             }
 
-            var response = Extensions.ApiClient.ApiExecute<Dictionary<int, Plan>>(
+            var response = ApiClient.ApiExecute<Dictionary<int, Plan>>(
                 "plans/list", ApiKey, args);
             return new PlanResult()
             {
@@ -45,7 +46,7 @@ namespace Vultr.API.Clients
         /// <returns>List of active or deprecated bare metal plans.</returns>
         public BareMetalPlanResult GetBaremetalPlans()
         {
-            var response = Extensions.ApiClient.ApiExecute<Dictionary<int, BareMetalPlan>>(
+            var response = ApiClient.ApiExecute<Dictionary<int, BareMetalPlan>>(
                 "plans/list_baremetal", ApiKey);
             return new BareMetalPlanResult()
             {
@@ -60,7 +61,7 @@ namespace Vultr.API.Clients
         /// <returns>List of active or deprecated VC2 plans.</returns>
         public VC2PlanResult GetVC2Plans()
         {
-            var response = Extensions.ApiClient.ApiExecute<Dictionary<int, VC2Plan>>(
+            var response = ApiClient.ApiExecute<Dictionary<int, VC2Plan>>(
                 "plans/list_vc2", ApiKey);
             return new VC2PlanResult()
             {
@@ -75,7 +76,7 @@ namespace Vultr.API.Clients
         /// <returns>List of active or deprecated VDC2 plans.</returns>
         public VDC2PlanResult GetVDC2Plans()
         {
-            var response = Extensions.ApiClient.ApiExecute<Dictionary<int, VDC2Plan>>(
+            var response = ApiClient.ApiExecute<Dictionary<int, VDC2Plan>>(
                 "plans/list_vdc2", ApiKey);
             return new VDC2PlanResult()
             {

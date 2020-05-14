@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vultr.API.Extensions;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -23,7 +24,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("availability", true),
             };
 
-            var response = Extensions.ApiClient.ApiExecute<Dictionary<int, Region>>(
+            var response = ApiClient.ApiExecute<Dictionary<int, Region>>(
                 "regions/list", ApiKey, args);
             return new RegionResult()
             {
@@ -54,7 +55,7 @@ namespace Vultr.API.Clients
                 args.Add(new KeyValuePair<string, object>("type", "all"));
             }
 
-            var response = Extensions.ApiClient.ApiExecute<PlanIdsClass>(
+            var response = ApiClient.ApiExecute<PlanIdsClass>(
                 "regions/availability", ApiKey, args);
             return new RegionAvailabilityResult()
             {
@@ -75,7 +76,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("DCID", DCID),
             };
 
-            var response = Extensions.ApiClient.ApiExecute<PlanIdsClass>(
+            var response = ApiClient.ApiExecute<PlanIdsClass>(
                 "regions/availability_baremetal", ApiKey, args);
             return new RegionAvailabilityResult()
             {
@@ -96,7 +97,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("DCID", DCID),
             };
 
-            var response = Extensions.ApiClient.ApiExecute<PlanIdsClass>(
+            var response = ApiClient.ApiExecute<PlanIdsClass>(
                 "regions/availability_vc2", ApiKey, args);
             return new RegionAvailabilityResult()
             {
@@ -117,7 +118,7 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("DCID", DCID),
             };
 
-            var response = Extensions.ApiClient.ApiExecute<PlanIdsClass>(
+            var response = ApiClient.ApiExecute<PlanIdsClass>(
                 "regions/availability_vdc2", ApiKey, args);
             return new RegionAvailabilityResult()
             {

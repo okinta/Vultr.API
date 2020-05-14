@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vultr.API.Extensions;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -9,7 +10,7 @@ namespace Vultr.API.Clients
 
         public ApplicationClient(string apiKey)
         {
-            ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
 
         /// <summary>
@@ -18,7 +19,7 @@ namespace Vultr.API.Clients
         /// <returns>Returns application list and HTTP API Respopnse.</returns>
         public ApplicationResult GetApplications()
         {
-            var response = Extensions.ApiClient.ApiExecute<
+            var response = ApiClient.ApiExecute<
                 Dictionary<string, Application>>("app/list", ApiKey);
             return new ApplicationResult()
             {

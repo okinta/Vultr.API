@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vultr.API.Extensions;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -18,7 +19,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all the SSH keys on the current account.</returns>
         public SSHKeyResult GetSSHKeys()
         {
-            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, SSHKey>>(
+            var response = ApiClient.ApiExecute<Dictionary<string, SSHKey>>(
                    "sshkey/list", ApiKey);
             return new SSHKeyResult()
             {
@@ -41,8 +42,8 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("ssh_key", ssh_key)
             };
 
-            var response = Extensions.ApiClient.ApiExecute<SSHKey>(
-                "sshkey/create", ApiKey, args, "POST");
+            var response = ApiClient.ApiExecute<SSHKey>(
+                "sshkey/create", ApiKey, args, ApiMethod.POST);
             return new SSHKeyCreateResult()
             {
                 ApiResponse = response.Item1,
@@ -62,8 +63,8 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SSHKEYID", SSHKEYID)
             };
 
-            var response = Extensions.ApiClient.ApiExecute<SSHKey>(
-                "sshkey/destroy", ApiKey, args, "POST");
+            var response = ApiClient.ApiExecute<SSHKey>(
+                "sshkey/destroy", ApiKey, args, ApiMethod.POST);
             return new SSHKeyDeleteResult()
             {
                 ApiResponse = response.Item1
@@ -84,8 +85,8 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("ssh_key", SSHKey.ssh_key)
             };
 
-            var response = Extensions.ApiClient.ApiExecute<SSHKey>(
-                "sshkey/update", ApiKey, args, "POST");
+            var response = ApiClient.ApiExecute<SSHKey>(
+                "sshkey/update", ApiKey, args, ApiMethod.POST);
             return new SSHKeyUpdateResult()
             {
                 ApiResponse = response.Item1

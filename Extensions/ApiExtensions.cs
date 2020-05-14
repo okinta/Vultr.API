@@ -11,8 +11,7 @@ namespace Vultr.API.Extensions
     public enum ApiMethod
     {
         GET,
-        POST,
-        PUT
+        POST
     }
 
     public static class ApiClient
@@ -37,19 +36,9 @@ namespace Vultr.API.Extensions
             string accessPoint,
             string apiKey,
             List<KeyValuePair<string, object>> parameters = null,
-            string method = "GET")
+            ApiMethod method = ApiMethod.GET)
         {
-            var apiMethod = method switch
-            {
-                "GET" => ApiMethod.GET,
-                "POST" => ApiMethod.POST,
-                "PUT" => ApiMethod.PUT,
-                _ => throw new ArgumentException(
-                    string.Format("Unknown method {0}", method)),
-            };
-
-            var response = ApiExecute(
-                accessPoint, apiKey, parameters, apiMethod);
+            var response = ApiExecute(accessPoint, apiKey, parameters, method);
             var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -108,12 +97,6 @@ namespace Vultr.API.Extensions
                 request.Method = HttpMethod.Post;
                 request.Content = new FormUrlEncodedContent(values);
             }
-            else if (method == ApiMethod.PUT)
-            {
-                request.RequestUri = new Uri(url);
-                request.Method = HttpMethod.Put;
-                request.Content = new FormUrlEncodedContent(values);
-            }
             else if (method == ApiMethod.GET)
             {
                 request.Method = HttpMethod.Get;
@@ -128,10 +111,8 @@ namespace Vultr.API.Extensions
                 request.RequestUri = builder.Uri;
             }
             else
-            {
                 throw new NotImplementedException(
                     string.Format("{0} method is not supported", method));
-            }
 
             return Client.SendAsync(request).GetAwaiter().GetResult();
         }
@@ -143,20 +124,13 @@ namespace Vultr.API.Extensions
         /// <returns>The converted value.</returns>
         private static string Convert(object value)
         {
-            if (value is null)
-            {
-                return "";
-            }
+            if (value is null) return "";
 
             if (value.GetType() == typeof(bool))
-            {
                 return (bool)value ? "yes" : "no";
-            }
 
             if (value.GetType() == typeof(string) || value.GetType() == typeof(int))
-            {
                 return value.ToString();
-            }
 
             throw new ArgumentException(
                 string.Format("unknown type: {0}", value), "value");

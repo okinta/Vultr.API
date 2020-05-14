@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vultr.API.Extensions;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -18,7 +19,7 @@ namespace Vultr.API.Clients
         /// <returns>List of all startup scripts on the current account.</returns>
         public StartupScriptResult GetStartupScripts()
         {
-            var response = Extensions.ApiClient.ApiExecute<
+            var response = ApiClient.ApiExecute<
                 Dictionary<string, StartupScript>>("startupscript/list", ApiKey);
             return new StartupScriptResult()
             {
@@ -43,8 +44,8 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("type", ScriptType.ToString())
             };
 
-            var response = Extensions.ApiClient.ApiExecute<StartupScript>(
-                "startupscript/create", ApiKey, args, "POST");
+            var response = ApiClient.ApiExecute<StartupScript>(
+                "startupscript/create", ApiKey, args, ApiMethod.POST);
             return new StartupScriptCreateResult()
             {
                 ApiResponse = response.Item1,
@@ -64,8 +65,8 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("SCRIPTID", SCRIPTID)
             };
 
-            var response = Extensions.ApiClient.ApiExecute<StartupScript>(
-                "startupscript/destroy", ApiKey, args, "POST");
+            var response = ApiClient.ApiExecute<StartupScript>(
+                "startupscript/destroy", ApiKey, args, ApiMethod.POST);
             return new StartupScriptDeleteResult()
             {
                 ApiResponse = response.Item1
@@ -90,8 +91,8 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("type", ScriptType.ToString())
             };
 
-            var response = Extensions.ApiClient.ApiExecute<StartupScript>(
-                "startupscript/update", ApiKey, args, "POST");
+            var response = ApiClient.ApiExecute<StartupScript>(
+                "startupscript/update", ApiKey, args, ApiMethod.POST);
             return new StartupScriptUpdateResult()
             {
                 ApiResponse = response.Item1

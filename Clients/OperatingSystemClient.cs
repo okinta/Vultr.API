@@ -1,5 +1,6 @@
 ﻿using OperatingSystem = Vultr.API.Models.Responses.OperatingSystem;
 using System.Collections.Generic;
+using Vultr.API.Extensions;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -21,7 +22,7 @@ namespace Vultr.API.Clients
         /// <returns>List of available operating systems.</returns>
         public OperatingSystemResult GetOperatingSystems()
         {
-            var response = Extensions.ApiClient.ApiExecute<
+            var response = ApiClient.ApiExecute<
                 Dictionary<int, OperatingSystem>>("os/list", ApiKey);
 
             return new OperatingSystemResult() {
