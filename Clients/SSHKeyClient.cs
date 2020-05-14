@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class SSHKeyClient
+    public class SSHKeyClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public SSHKeyClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public SSHKeyClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// List all the SSH keys on the current account.

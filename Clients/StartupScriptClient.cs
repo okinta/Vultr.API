@@ -2,17 +2,13 @@
 using System.Net.Http;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class StartupScriptClient
+    public class StartupScriptClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public StartupScriptClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public StartupScriptClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// List all startup scripts on the current account. Scripts of type "boot" are

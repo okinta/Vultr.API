@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class ReservedIPClient
+    public class ReservedIPClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public ReservedIPClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public ReservedIPClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// List all the active reserved IPs on this account. The "subnet_size" field is the size of the network assigned to this subscription. This will typically be a /64 for IPv6, or a /32 for IPv4.

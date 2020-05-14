@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class FirewallClient
+    public class FirewallClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public FirewallClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public FirewallClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// List all firewall groups on the current account.

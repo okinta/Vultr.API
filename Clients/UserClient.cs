@@ -2,17 +2,13 @@
 using System.Linq;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class UserClient
+    public class UserClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public UserClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public UserClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// Retrieve a list of any users associated with this account.

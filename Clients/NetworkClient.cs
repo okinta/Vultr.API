@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class NetworkClient
+    public class NetworkClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public NetworkClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public NetworkClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// List all private networks on the current account.

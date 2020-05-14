@@ -3,17 +3,13 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class DNSClient
+    public class DNSClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public DNSClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public DNSClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// List all domains associated with the current account.

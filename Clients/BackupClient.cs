@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class BackupClient
+    public class BackupClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public BackupClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public BackupClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// List all backups on the current account.

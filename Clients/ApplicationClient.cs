@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class ApplicationClient
+    public class ApplicationClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public ApplicationClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public ApplicationClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// Retrieve a list of available applications. These refer to applications that can be launched when creating a Vultr VPS.

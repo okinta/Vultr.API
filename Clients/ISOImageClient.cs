@@ -2,17 +2,13 @@
 using System;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class ISOImageClient
+    public class ISOImageClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public ISOImageClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public ISOImageClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// List all ISOs currently available on this account.

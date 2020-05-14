@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class BlockClient
+    public class BlockClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public BlockClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public BlockClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// Retrieve a list of any active block storage subscriptions on this account.

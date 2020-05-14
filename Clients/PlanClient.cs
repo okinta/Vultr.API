@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class PlanClient
+    public class PlanClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public PlanClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public PlanClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// Retrieve a list of all active plans. Plans that are no longer available will not be shown. The "windows" field Is no longer in use, And will always be false. Windows licenses will be automatically added to any plan as necessary. The "deprecated" field indicates that the plan will be going away in the future. New deployments of it will still be accepted, but you should begin to transition away from its usage. Typically, deprecated plans are available for 30 days after they are deprecated. The sandbox plan Is Not available In the API.

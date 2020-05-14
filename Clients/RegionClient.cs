@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class RegionClient
+    public class RegionClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public RegionClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public RegionClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// Retrieve a list of all active regions. Note that just because a region is listed here, does not mean that there is room for new servers.

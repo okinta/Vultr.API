@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class SnapshotClient
+    public class SnapshotClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public SnapshotClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public SnapshotClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// List all snapshots on the current account.

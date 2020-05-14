@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class OperatingSystemClient
+    public class OperatingSystemClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public OperatingSystemClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public OperatingSystemClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// Retrieve a list of available operating systems. If the "windows" flag is

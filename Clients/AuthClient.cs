@@ -1,16 +1,12 @@
 ﻿using Vultr.API.Extensions;
 using Vultr.API.Models;
+using Vultr.Clients;
 
 namespace Vultr.API.Clients
 {
-    public class AuthClient
+    public class AuthClient : BaseClient
     {
-        private string ApiKey { get; }
-
-        public AuthClient(string apiKey)
-        {
-            ApiKey = apiKey;
-        }
+        public AuthClient(string apiKey, string apiURL) : base(apiKey, apiURL) { }
 
         /// <summary>
         /// Retrieve information about the current API key.
