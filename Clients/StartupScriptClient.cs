@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
 {
     public class StartupScriptClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public StartupScriptClient(string ApiKey)
+        public StartupScriptClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
 
         /// <summary>
@@ -20,18 +18,13 @@ namespace Vultr.API.Clients
         /// <returns>List of all startup scripts on the current account.</returns>
         public StartupScriptResult GetStartupScripts()
         {
-            var answer = new Dictionary<string, StartupScript>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("startupscript/list", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<
+                Dictionary<string, StartupScript>>("startupscript/list", ApiKey);
+            return new StartupScriptResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<string, StartupScript>>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
-
-            return new StartupScriptResult() { ApiResponse = httpResponse, StartupScripts = answer };
+                ApiResponse = response.Item1,
+                StartupScripts = response.Item2
+            };
         }
 
         /// <summary>
@@ -43,22 +36,20 @@ namespace Vultr.API.Clients
         /// <returns>StartupScript element with only SCRIPTID.</returns>
         public StartupScriptCreateResult CreateStartupScript(string name, string script, ScriptType ScriptType)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("name", name));
-            dict.Add(new KeyValuePair<string, object>("script", script));
-            dict.Add(new KeyValuePair<string, object>("type", ScriptType.ToString()));
-            var answer = new StartupScript();
-            var httpResponse = Extensions.ApiClient.ApiExecute("startupscript/create", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<StartupScript>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("name", name),
+                new KeyValuePair<string, object>("script", script),
+                new KeyValuePair<string, object>("type", ScriptType.ToString())
+            };
 
-            return new StartupScriptCreateResult() { ApiResponse = httpResponse, StartupScript = answer };
+            var response = Extensions.ApiClient.ApiExecute<StartupScript>(
+                "startupscript/create", ApiKey, args, "POST");
+            return new StartupScriptCreateResult()
+            {
+                ApiResponse = response.Item1,
+                StartupScript = response.Item2
+            };
         }
 
         /// <summary>
@@ -68,18 +59,17 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public StartupScriptDeleteResult DeleteStartupScript(string SCRIPTID)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SCRIPTID", SCRIPTID));
-            var httpResponse = Extensions.ApiClient.ApiExecute("startupscript/destroy", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
-            }
+                new KeyValuePair<string, object>("SCRIPTID", SCRIPTID)
+            };
 
-            return new StartupScriptDeleteResult() { ApiResponse = httpResponse };
+            var response = Extensions.ApiClient.ApiExecute<StartupScript>(
+                "startupscript/destroy", ApiKey, args, "POST");
+            return new StartupScriptDeleteResult()
+            {
+                ApiResponse = response.Item1
+            };
         }
 
         /// <summary>
@@ -92,21 +82,20 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public StartupScriptUpdateResult UpdateSSHKey(string SCRIPTID, string name, string script, ScriptType ScriptType)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SCRIPTID", SCRIPTID));
-            dict.Add(new KeyValuePair<string, object>("name", name));
-            dict.Add(new KeyValuePair<string, object>("script", script));
-            dict.Add(new KeyValuePair<string, object>("type", ScriptType.ToString()));
-            var httpResponse = Extensions.ApiClient.ApiExecute("startupscript/update", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
-            }
+                new KeyValuePair<string, object>("SCRIPTID", SCRIPTID),
+                new KeyValuePair<string, object>("name", name),
+                new KeyValuePair<string, object>("script", script),
+                new KeyValuePair<string, object>("type", ScriptType.ToString())
+            };
 
-            return new StartupScriptUpdateResult() { ApiResponse = httpResponse };
+            var response = Extensions.ApiClient.ApiExecute<StartupScript>(
+                "startupscript/update", ApiKey, args, "POST");
+            return new StartupScriptUpdateResult()
+            {
+                ApiResponse = response.Item1
+            };
         }
     }
 }

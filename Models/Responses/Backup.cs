@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
+using System.Net.Http;
 
 namespace Vultr.API.Models.Responses
 {
@@ -15,7 +15,7 @@ namespace Vultr.API.Models.Responses
     public struct BackupResult
     {
         public Dictionary<string, Backup> Backups { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public class Schedule
@@ -26,17 +26,20 @@ namespace Vultr.API.Models.Responses
         /// </summary>
         /// <returns></returns>
         public string cron_type { get; set; }
+
         public string next_scheduled_time_utc { get; set; }
         /// <summary>
         /// Hour value (0-23). Applicable to crons: 'daily', 'weekly', 'monthly', 'daily_alt_even', 'daily_alt_odd'
         /// </summary>
         /// <returns></returns>
         public Hour hour { get; set; }
+
         /// <summary>
         /// Day-of-week value (0-6). Applicable to crons: 'weekly'.
         /// </summary>
         /// <returns></returns>
         public DOW dow { get; set; }
+
         /// <summary>
         /// Day-of-month value (1-28). Applicable to crons: 'monthly'.
         /// </summary>
@@ -47,8 +50,9 @@ namespace Vultr.API.Models.Responses
     public struct ScheduleResult
     {
         public Schedule Schedule { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
+
     /// <summary>
     /// Hour value (0-23). Applicable to crons: 'daily', 'weekly', 'monthly', 'daily_alt_even', 'daily_alt_odd'
     /// </summary>
@@ -80,6 +84,7 @@ namespace Vultr.API.Models.Responses
         HOUR23,
         HOUR24
     }
+
     /// <summary>
     /// Day-of-week value (0-6). Applicable to crons: 'weekly'.
     /// </summary>
@@ -93,6 +98,7 @@ namespace Vultr.API.Models.Responses
         Friday,
         Saturday
     }
+
     /// <summary>
     /// Day-of-month value (1-28). Applicable to crons: 'monthly'.
     /// </summary>

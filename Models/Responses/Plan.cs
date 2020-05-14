@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
+using System.Net.Http;
 
 namespace Vultr.API.Models.Responses
 {
@@ -21,7 +21,7 @@ namespace Vultr.API.Models.Responses
     public struct PlanResult
     {
         public Dictionary<int, Plan> Plans { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public class BareMetalPlan
@@ -41,7 +41,7 @@ namespace Vultr.API.Models.Responses
     public struct BareMetalPlanResult
     {
         public Dictionary<int, BareMetalPlan> Plans { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public class VC2Plan
@@ -61,7 +61,7 @@ namespace Vultr.API.Models.Responses
     public struct VC2PlanResult
     {
         public Dictionary<int, VC2Plan> Plans { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public class VDC2Plan
@@ -81,6 +81,6 @@ namespace Vultr.API.Models.Responses
     public struct VDC2PlanResult
     {
         public Dictionary<int, VDC2Plan> Plans { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 }

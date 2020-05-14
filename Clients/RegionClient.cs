@@ -1,20 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
 {
     public class RegionClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public RegionClient(string ApiKey)
+        public RegionClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
-
-        public string Type { get; private set; }
 
         /// <summary>
         /// Retrieve a list of all active regions. Note that just because a region is listed here, does not mean that there is room for new servers.
@@ -22,16 +18,18 @@ namespace Vultr.API.Clients
         /// <returns>List of active regions.</returns>
         public RegionResult GetRegions()
         {
-            var answer = new Dictionary<int, Region>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("regions/list?availability=yes", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Dictionary<int, Region>>((st ?? "") == "[]" ? "{}" : st);
-            }
+                new KeyValuePair<string, object>("availability", true),
+            };
 
-            return new RegionResult() { ApiResponse = httpResponse, Regions = answer };
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<int, Region>>(
+                "regions/list", ApiKey, args);
+            return new RegionResult()
+            {
+                ApiResponse = response.Item1,
+                Regions = response.Item2
+            };
         }
 
         /// <summary>
@@ -42,27 +40,27 @@ namespace Vultr.API.Clients
         /// <returns>List of the VPSPLANIDs currently available in this location.</returns>
         public RegionAvailabilityResult GetAvailablePlans(int DCID, string type = "all")
         {
+            var args = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("DCID", DCID),
+            };
+
             if ((type ?? "") == "all" | (type ?? "") == "vc2" | (type ?? "") == "ssd" | (type ?? "") == "vdc2" | (type ?? "") == "dedicated")
             {
-                Type = type;
+                args.Add(new KeyValuePair<string, object>("type", type));
             }
             else
             {
-                Type = "all";
+                args.Add(new KeyValuePair<string, object>("type", "all"));
             }
 
-            var answer = new PlanIdsClass();
-            var httpResponse = Extensions.ApiClient.ApiExecute("regions/availability?DCID=" + DCID + "&type=" + Type, _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<PlanIdsClass>(
+                "regions/availability", ApiKey, args);
+            return new RegionAvailabilityResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
-
-            return new RegionAvailabilityResult() { ApiResponse = httpResponse, PlanIds = answer };
+                ApiResponse = response.Item1,
+                PlanIds = response.Item2
+            };
         }
 
         /// <summary>
@@ -72,20 +70,19 @@ namespace Vultr.API.Clients
         /// <returns>List of the Bare Metal Plans currently available in this location.</returns>
         public RegionAvailabilityResult GetAvailableBareMetalPlans(int DCID)
         {
-            var answer = new PlanIdsClass();
-            var httpResponse = Extensions.ApiClient.ApiExecute("regions/availability_baremetal?DCID=" + DCID, _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("DCID", DCID),
+            };
 
-            return new RegionAvailabilityResult() { ApiResponse = httpResponse, PlanIds = answer };
+            var response = Extensions.ApiClient.ApiExecute<PlanIdsClass>(
+                "regions/availability_baremetal", ApiKey, args);
+            return new RegionAvailabilityResult()
+            {
+                ApiResponse = response.Item1,
+                PlanIds = response.Item2
+            };
         }
-
 
         /// <summary>
         /// Retrieve a list of the vc2 VPSPLANIDs currently available in this location.
@@ -94,18 +91,18 @@ namespace Vultr.API.Clients
         /// <returns>List of the vc2 VPSPLANIDs currently available in this location.</returns>
         public RegionAvailabilityResult GetAvailableVC2Plans(int DCID)
         {
-            var answer = new PlanIdsClass();
-            var httpResponse = Extensions.ApiClient.ApiExecute("regions/availability_vc2?DCID=" + DCID, _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("DCID", DCID),
+            };
 
-            return new RegionAvailabilityResult() { ApiResponse = httpResponse, PlanIds = answer };
+            var response = Extensions.ApiClient.ApiExecute<PlanIdsClass>(
+                "regions/availability_vc2", ApiKey, args);
+            return new RegionAvailabilityResult()
+            {
+                ApiResponse = response.Item1,
+                PlanIds = response.Item2
+            };
         }
 
         /// <summary>
@@ -115,18 +112,18 @@ namespace Vultr.API.Clients
         /// <returns>List of the vdc2 VPSPLANIDs currently available in this location.</returns>
         public RegionAvailabilityResult GetAvailableVDC2Plans(int DCID)
         {
-            var answer = new PlanIdsClass();
-            var httpResponse = Extensions.ApiClient.ApiExecute("regions/availability_vdc2?DCID=" + DCID, _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<PlanIdsClass>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("DCID", DCID),
+            };
 
-            return new RegionAvailabilityResult() { ApiResponse = httpResponse, PlanIds = answer };
+            var response = Extensions.ApiClient.ApiExecute<PlanIdsClass>(
+                "regions/availability_vdc2", ApiKey, args);
+            return new RegionAvailabilityResult()
+            {
+                ApiResponse = response.Item1,
+                PlanIds = response.Item2
+            };
         }
     }
 }

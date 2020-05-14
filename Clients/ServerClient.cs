@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Net;
+﻿using System.Collections.Generic;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
@@ -22,16 +18,13 @@ namespace Vultr.API.Clients
         /// <returns>List of active or panding servers.</returns>
         public ServerResult GetServers()
         {
-            var answer = new Dictionary<string, Server>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("server/list", ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, Server>>(
+                "server/list", ApiKey);
+            return new ServerResult()
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Dictionary<string, Server>>((st ?? "") == "[]" ? "{}" : st);
-            }
-
-            return new ServerResult() { ApiResponse = httpResponse, Servers = answer };
+                ApiResponse = response.Item1,
+                Servers = response.Item2
+            };
         }
 
         /// <summary>
@@ -42,22 +35,19 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public ServerResult AppChange(int SubId, int AppId)
         {
-            var dict = new List<KeyValuePair<string, object>>
+            var args = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("SUBID", SubId),
                 new KeyValuePair<string, object>("APPID", AppId)
             };
 
-            var answer = new Dictionary<string, Server>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("server/app_change", ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, Server>>(
+                "server/app_change", ApiKey, args, "POST");
+            return new ServerResult()
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Dictionary<string, Server>>((st ?? "") == "[]" ? "{}" : st);
-            }
-
-            return new ServerResult() { ApiResponse = httpResponse, Servers = answer };
+                ApiResponse = response.Item1,
+                Servers = response.Item2
+            };
         }
 
         /// <summary>
@@ -67,17 +57,18 @@ namespace Vultr.API.Clients
         /// <returns>List of available apps</returns>
         public ApplicationResult AppsAvailable(int SubId)
         {
-            var answer = new ApplicationResult();
-            var httpResponse = Extensions.ApiClient.ApiExecute("server/app_change_list?SUBID=" + SubId, "");
-
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer.Applications = JsonConvert.DeserializeObject<Dictionary<string, Application>>(st);
-            }
+                new KeyValuePair<string, object>("SUBID", SubId)
+            };
 
-            return new ApplicationResult() { ApiResponse = httpResponse, Applications = answer.Applications };
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, Application>>(
+                "server/app_change", ApiKey, args, "POST");
+            return new ApplicationResult()
+            {
+                ApiResponse = response.Item1,
+                Applications = response.Item2
+            };
         }
 
         /// <summary>
@@ -87,21 +78,18 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public BackupResult BackupDisable(int SubId)
         {
-            var dict = new List<KeyValuePair<string, object>>
+            var args = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("SUBID", SubId)
             };
 
-            var answer = new Dictionary<string, Backup>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("server/backup_disable", ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, Backup>>(
+                "server/backup_disable", ApiKey, args, "POST");
+            return new BackupResult()
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Dictionary<string, Backup>>((st ?? "") == "[]" ? "{}" : st);
-            }
-
-            return new BackupResult() { ApiResponse = httpResponse, Backups = answer };
+                ApiResponse = response.Item1,
+                Backups = response.Item2
+            };
         }
 
         /// <summary>
@@ -111,20 +99,18 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public BackupResult BackupEnable(int SubId)
         {
-            var dict = new List<KeyValuePair<string, object>>
+            var args = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("SUBID", SubId)
             };
-            var answer = new Dictionary<string, Backup>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("server/backup_enable", ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
-            {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Dictionary<string, Backup>>((st ?? "") == "[]" ? "{}" : st);
-            }
 
-            return new BackupResult() { ApiResponse = httpResponse, Backups = answer };
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, Backup>>(
+                "server/backup_enable", ApiKey, args, "POST");
+            return new BackupResult()
+            {
+                ApiResponse = response.Item1,
+                Backups = response.Item2
+            };
         }
 
         /// <summary>
@@ -134,21 +120,18 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public ScheduleResult BackupScheduleGet(int SubId)
         {
-            var dict = new List<KeyValuePair<string, object>>
+            var args = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("SUBID", SubId)
             };
 
-            var answer = new Schedule();
-            var httpResponse = Extensions.ApiClient.ApiExecute("server/backup_get_schedule", ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Schedule>(
+                "server/backup_get_schedule", ApiKey, args, "POST");
+            return new ScheduleResult()
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Schedule>((st ?? "") == "[]" ? "{}" : st);
-            }
-
-            return new ScheduleResult() { ApiResponse = httpResponse, Schedule = answer };
+                ApiResponse = response.Item1,
+                Schedule = response.Item2
+            };
         }
 
         /// <summary>
@@ -159,7 +142,7 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public ScheduleResult BackupScheduleSet(int SubId, Schedule Schedule)
         {
-            var dict = new List<KeyValuePair<string, object>>
+            var args = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("SUBID", SubId),
                 new KeyValuePair<string, object>("cron_type", Schedule.cron_type),
@@ -167,16 +150,14 @@ namespace Vultr.API.Clients
                 new KeyValuePair<string, object>("dow", Schedule.dow),
                 new KeyValuePair<string, object>("dom", Schedule.dom)
             };
-            var answer = new Schedule();
-            var httpResponse = Extensions.ApiClient.ApiExecute("server/backup_get_schedule", ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
-            {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Schedule>((st ?? "") == "[]" ? "{}" : st);
-            }
 
-            return new ScheduleResult() { ApiResponse = httpResponse, Schedule = answer };
+            var response = Extensions.ApiClient.ApiExecute<Schedule>(
+                "server/backup_get_schedule", ApiKey, args, "POST");
+            return new ScheduleResult()
+            {
+                ApiResponse = response.Item1,
+                Schedule = response.Item2
+            };
         }
 
         /// <summary>
@@ -186,17 +167,18 @@ namespace Vultr.API.Clients
         /// <returns>Bandwidth used by a virtual machine day by day.</returns>
         public BandwidthResult BandwidthGet(int SubId)
         {
-            var answer = new BandwidthResult();
-            var httpResponse = Extensions.ApiClient.ApiExecute("server/bandwidth?SUBID=" + SubId, ApiKey);
-
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer.BandWidth = JsonConvert.DeserializeObject<BandWidth>(st);
-            }
+                new KeyValuePair<string, object>("SUBID", SubId)
+            };
 
-            return new BandwidthResult() { ApiResponse = httpResponse, BandWidth = answer.BandWidth };
+            var response = Extensions.ApiClient.ApiExecute<BandWidth>(
+                "server/backup_get_schedule", ApiKey, args, "POST");
+            return new BandwidthResult()
+            {
+                ApiResponse = response.Item1,
+                BandWidth = response.Item2
+            };
         }
 
         /// <summary>

@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using Microsoft.VisualBasic;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
 {
     public class FirewallClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public FirewallClient(string ApiKey)
+        public FirewallClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
 
         /// <summary>
@@ -21,18 +18,13 @@ namespace Vultr.API.Clients
         /// <returns>List of all firewall groups on the current account.</returns>
         public FirewallGroupResult GetFirewallGroups()
         {
-            var answer = new Dictionary<string, FirewallGroup>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("firewall/group_list", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<
+                Dictionary<string, FirewallGroup>>("firewall/group_list", ApiKey);
+            return new FirewallGroupResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<string, FirewallGroup>>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
-
-            return new FirewallGroupResult() { ApiResponse = httpResponse, FirewallGroups = answer };
+                ApiResponse = response.Item1,
+                FirewallGroups = response.Item2
+            };
         }
 
         /// <summary>
@@ -42,20 +34,18 @@ namespace Vultr.API.Clients
         /// <returns>FirewallGroup element with only FIREWALLGROUPID.</returns>
         public FirewallGroupCreateResult CreateFirewallGroup(string description)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("description", description));
-            var answer = new FirewallGroup();
-            var httpResponse = Extensions.ApiClient.ApiExecute("firewall/group_create", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<FirewallGroup>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("description", description)
+            };
 
-            return new FirewallGroupCreateResult() { ApiResponse = httpResponse, FirewallGroup = answer };
+            var response = Extensions.ApiClient.ApiExecute<FirewallGroup>(
+                "firewall/group_create", ApiKey, args, "POST");
+            return new FirewallGroupCreateResult()
+            {
+                ApiResponse = response.Item1,
+                FirewallGroup = response.Item2
+            };
         }
 
         /// <summary>
@@ -65,18 +55,17 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public FirewallGroupDeleteResult DeleteFirewallGroup(string FIREWALLGROUPID)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID));
-            var httpResponse = Extensions.ApiClient.ApiExecute("firewall/group_delete", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
-            }
+                new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID)
+            };
 
-            return new FirewallGroupDeleteResult() { ApiResponse = httpResponse };
+            var response = Extensions.ApiClient.ApiExecute<FirewallGroup>(
+                "firewall/group_delete", ApiKey, args, "POST");
+            return new FirewallGroupDeleteResult()
+            {
+                ApiResponse = response.Item1
+            };
         }
 
         /// <summary>
@@ -87,20 +76,18 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public FirewallGroupUpdateResult UpdateFirewallGroup(string description, string FIREWALLGROUPID)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("description", description));
-            dict.Add(new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID));
-            var answer = new FirewallGroup();
-            var httpResponse = Extensions.ApiClient.ApiExecute("firewall/group_set_description", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
-            }
+                new KeyValuePair<string, object>("description", description),
+                new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID)
+            };
 
-            return new FirewallGroupUpdateResult() { ApiResponse = httpResponse };
+            var response = Extensions.ApiClient.ApiExecute<FirewallGroup>(
+                "firewall/group_set_description", ApiKey, args, "POST");
+            return new FirewallGroupUpdateResult()
+            {
+                ApiResponse = response.Item1
+            };
         }
 
         /// <summary>
@@ -110,25 +97,24 @@ namespace Vultr.API.Clients
         /// <param name="ip_type">IP address type. Possible values: "IPV4", "IPV6"</param>
         /// <param name="direction">Direction of rule.</param>
         /// <returns>List of all firewall roles on the current account.</returns>
-        public FirewallRuleResult GetFirewallRules(string FIREWALLGROUPID, IPTYPE ip_type, FirewallDirection direction)
+        public FirewallRuleResult GetFirewallRules(
+            string FIREWALLGROUPID, IPTYPE ip_type = IPTYPE.V4,
+            FirewallDirection direction = FirewallDirection.In)
         {
-            if (Information.IsNothing(ip_type))
+            var args = new List<KeyValuePair<string, object>>
             {
-                ip_type = IPTYPE.IPV4;
-            }
+                new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID),
+                new KeyValuePair<string, object>("direction", direction),
+                new KeyValuePair<string, object>("ip_type", ip_type),
+            };
 
-            var answer = new Dictionary<string, FirewallRule>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("firewall/rule_list?FIREWALLGROUPID=" + FIREWALLGROUPID + "&direction=in&ip_type=" + ip_type.ToString(), _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<
+                Dictionary<string, FirewallRule>>("firewall/rule_list", ApiKey, args);
+            return new FirewallRuleResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<string, FirewallRule>>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
-
-            return new FirewallRuleResult() { ApiResponse = httpResponse, FirewallRules = answer };
+                ApiResponse = response.Item1,
+                FirewallRules = response.Item2
+            };
         }
 
         /// <summary>
@@ -136,28 +122,26 @@ namespace Vultr.API.Clients
         /// </summary>
         /// <param name="FirewallRule">New FirewallRule object.</param>
         /// <returns>FirewallGroup element with only FIREWALLGROUPID.</returns>
-        public FirewallRuleCreateResult CreateFirewallRule(string FIREWALLGROUPID, FirewallRule FirewallRule, FirewallDirection FirewallDirection)
+        public FirewallRuleCreateResult CreateFirewallRule(string FIREWALLGROUPID, FirewallRule FirewallRule, FirewallDirection FirewallDirection = FirewallDirection.In)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID));
-            dict.Add(new KeyValuePair<string, object>("direction", FirewallDirection.ToString()));
-            dict.Add(new KeyValuePair<string, object>("action", FirewallRule.action));
-            dict.Add(new KeyValuePair<string, object>("port", FirewallRule.port));
-            dict.Add(new KeyValuePair<string, object>("protocol", FirewallRule.protocol));
-            dict.Add(new KeyValuePair<string, object>("subnet", FirewallRule.subnet));
-            dict.Add(new KeyValuePair<string, object>("subnet_size", FirewallRule.subnet_size));
-            var answer = new FirewallRule();
-            var httpResponse = Extensions.ApiClient.ApiExecute("firewall/rule_create", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<FirewallRule>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID),
+                new KeyValuePair<string, object>("direction", FirewallDirection.ToString()),
+                new KeyValuePair<string, object>("action", FirewallRule.action),
+                new KeyValuePair<string, object>("port", FirewallRule.port),
+                new KeyValuePair<string, object>("protocol", FirewallRule.protocol),
+                new KeyValuePair<string, object>("subnet", FirewallRule.subnet),
+                new KeyValuePair<string, object>("subnet_size", FirewallRule.subnet_size)
+            };
 
-            return new FirewallRuleCreateResult() { ApiResponse = httpResponse, FirewallRule = answer };
+            var response = Extensions.ApiClient.ApiExecute<FirewallRule>(
+                "firewall/rule_create", ApiKey, args, "POST");
+            return new FirewallRuleCreateResult()
+            {
+                ApiResponse = response.Item1,
+                FirewallRule = response.Item2
+            };
         }
 
         /// <summary>
@@ -166,21 +150,21 @@ namespace Vultr.API.Clients
         /// <param name="FIREWALLGROUPID">Unique identifier for Firewall group to delete. These can be found Using the GetFirewallGroups()</param>
         /// <param name="rulenumber">Unique identifier for Firewall rule to delete. These can be found Using the GetFirewallRules()</param>
         /// <returns>No response, check HTTP result code.</returns>
-        public FirewallRuleDeleteResult DeleteFirewallRule(string FIREWALLGROUPID, int rulenumber)
+        public FirewallRuleDeleteResult DeleteFirewallRule(
+            string FIREWALLGROUPID, int rulenumber)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID));
-            dict.Add(new KeyValuePair<string, object>("rulenumber", rulenumber));
-            var httpResponse = Extensions.ApiClient.ApiExecute("firewall/rule_delete", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
-            }
+                new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID),
+                new KeyValuePair<string, object>("rulenumber", rulenumber)
+            };
 
-            return new FirewallRuleDeleteResult() { ApiResponse = httpResponse };
+            var response = Extensions.ApiClient.ApiExecute<FirewallRule>(
+                "firewall/rule_delete", ApiKey, args, "POST");
+            return new FirewallRuleDeleteResult()
+            {
+                ApiResponse = response.Item1
+            };
         }
     }
 }

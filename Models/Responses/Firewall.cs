@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
+using System.Net.Http;
 
 namespace Vultr.API.Models.Responses
 {
@@ -27,78 +27,56 @@ namespace Vultr.API.Models.Responses
     public struct FirewallRuleResult
     {
         public Dictionary<string, FirewallRule> FirewallRules { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct FirewallGroupResult
     {
         public Dictionary<string, FirewallGroup> FirewallGroups { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct FirewallRuleCreateResult
     {
         public FirewallRule FirewallRule { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct FirewallRuleDeleteResult
     {
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct FirewallRuleUpdateResult
     {
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct FirewallGroupCreateResult
     {
         public FirewallGroup FirewallGroup { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct FirewallGroupDeleteResult
     {
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct FirewallGroupUpdateResult
     {
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
-    public class IPTYPE
+    public enum IPTYPE
     {
-        private string Key;
-        public static readonly IPTYPE IPV4 = new IPTYPE("v4");
-        public static readonly IPTYPE IPV6 = new IPTYPE("v6");
-
-        private IPTYPE(string key)
-        {
-            Key = key;
-        }
-
-        public override string ToString()
-        {
-            return Key;
-        }
+        V4,
+        V6
     }
 
-    public class FirewallDirection
+    public enum FirewallDirection
     {
-        private string Key;
-        public static readonly FirewallDirection DIRECTIONIN = new FirewallDirection("in");
-        public static readonly FirewallDirection DIRECTIONOUT = new FirewallDirection("out");
-
-        private FirewallDirection(string key)
-        {
-            Key = key;
-        }
-
-        public override string ToString()
-        {
-            return Key;
-        }
+        In,
+        Out
     }
 }

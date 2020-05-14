@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
+using System.Net.Http;
 
 namespace Vultr.API.Models.Responses
 {
@@ -18,17 +18,17 @@ namespace Vultr.API.Models.Responses
     public struct BlockCreateResult
     {
         public Block Block { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct BlockResult
     {
         public List<Block> Blocks { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct BlockUpdateResult
     {
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 }

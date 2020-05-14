@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Net;
+﻿using System.Collections.Generic;
 using System;
 using Vultr.API.Models.Responses;
 
@@ -10,11 +6,11 @@ namespace Vultr.API.Clients
 {
     public class ISOImageClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public ISOImageClient(string ApiKey)
+        public ISOImageClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
 
         /// <summary>
@@ -24,7 +20,7 @@ namespace Vultr.API.Clients
         public ISOImageResult GetISOImages()
         {
             var response = Extensions.ApiClient.ApiExecute<Dictionary<string, ISOImage>>(
-                "iso/list", _ApiKey);
+                "iso/list", ApiKey);
             return new ISOImageResult() {
                 ApiResponse = response.Item1, ISOImages = response.Item2
             };
@@ -35,16 +31,13 @@ namespace Vultr.API.Clients
         /// <returns>List of all public ISOs offered in the Vultr ISO library.</returns>
         public ISOImageResult GetPublicISOImages()
         {
-            var answer = new Dictionary<string, ISOImage>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("iso/list_public", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, ISOImage>>(
+                "iso/list_public", ApiKey);
+            return new ISOImageResult()
             {
-                using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-                string st = streamReader.ReadToEnd();
-                answer = JsonConvert.DeserializeObject<Dictionary<string, ISOImage>>((st ?? "") == "[]" ? "{}" : st);
-            }
-
-            return new ISOImageResult() { ApiResponse = httpResponse, ISOImages = answer };
+                ApiResponse = response.Item1,
+                ISOImages = response.Item2
+            };
         }
 
         /// <summary>
@@ -54,35 +47,17 @@ namespace Vultr.API.Clients
         /// <returns>Returns backup list and HTTP API Respopnse.</returns>
         public ISOImageCreateResult CreateISOImage(Uri URL)
         {
-            var dict = new List<KeyValuePair<string, object>>
+            var args = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("url", URL.AbsoluteUri)
             };
 
-            var httpResponse = Extensions.ApiClient.ApiExecute(
-                "iso/create_from_url", _ApiKey, dict, "POST");
-
-            string content;
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            var response = Extensions.ApiClient.ApiExecute<ISOImage>(
+                "iso/create_from_url", ApiKey, args, "POST");
+            return new ISOImageCreateResult()
             {
-                content = streamReader.ReadToEnd();
-            }
-
-            if (httpResponse.StatusCode != HttpStatusCode.OK)
-            {
-                throw new HttpRequestException(
-                    string.Format("{0}: {1}", httpResponse.StatusCode, content));
-            }
-
-            var answer = new ISOImageCreateResult
-            {
-                ISOImage = JsonConvert.DeserializeObject<ISOImage>(
-                    (content ?? "") == "[]" ? "{}" : content)
-            };
-
-            return new ISOImageCreateResult() {
-                ApiResponse = httpResponse,
-                ISOImage = answer.ISOImage
+                ApiResponse = response.Item1,
+                ISOImage = response.Item2
             };
         }
     }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
+using System.Net.Http;
 
 namespace Vultr.API.Models.Responses
 {
@@ -14,22 +14,22 @@ namespace Vultr.API.Models.Responses
     public struct SSHKeyCreateResult
     {
         public SSHKey SSHKey { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct SSHKeyDeleteResult
     {
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct SSHKeyUpdateResult
     {
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct SSHKeyResult
     {
         public Dictionary<string, SSHKey> SSHKeys { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 }

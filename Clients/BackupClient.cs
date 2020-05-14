@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
 {
     public class BackupClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public BackupClient(string ApiKey)
+        public BackupClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
 
         /// <summary>
@@ -20,18 +18,13 @@ namespace Vultr.API.Clients
         /// <returns>Returns backup list and HTTP API Respopnse.</returns>
         public BackupResult GetBackups()
         {
-            var answer = new BackupResult();
-            var httpResponse = Extensions.ApiClient.ApiExecute("backup/list", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, Backup>>(
+                "backup/list", ApiKey);
+            return new BackupResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer.Backups = JsonConvert.DeserializeObject<Dictionary<string, Backup>>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
-
-            return new BackupResult() { ApiResponse = httpResponse, Backups = answer.Backups };
+                ApiResponse = response.Item1,
+                Backups = response.Item2
+            };
         }
 
         /// <summary>
@@ -41,20 +34,18 @@ namespace Vultr.API.Clients
         /// <returns>Returns backup and HTTP API Respopnse.</returns>
         public BackupResult GetBackupByBackupId(string BackupId)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("BACKUPID", BackupId));
-            var answer = new BackupResult();
-            var httpResponse = Extensions.ApiClient.ApiExecute("backup/list", _ApiKey, dict);
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer.Backups = JsonConvert.DeserializeObject<Dictionary<string, Backup>>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("BACKUPID", BackupId)
+            };
 
-            return new BackupResult() { ApiResponse = httpResponse, Backups = answer.Backups };
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, Backup>>(
+                "backup/list", ApiKey, args);
+            return new BackupResult()
+            {
+                ApiResponse = response.Item1,
+                Backups = response.Item2
+            };
         }
 
         /// <summary>
@@ -64,20 +55,18 @@ namespace Vultr.API.Clients
         /// <returns>Returns backup and HTTP API Respopnse.</returns>
         public BackupResult GetBackupBySUBID(string SubId)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SUBID", SubId));
-            var answer = new BackupResult();
-            var httpResponse = Extensions.ApiClient.ApiExecute("backup/list", _ApiKey, dict);
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer.Backups = JsonConvert.DeserializeObject<Dictionary<string, Backup>>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("SUBID", SubId)
+            };
 
-            return new BackupResult() { ApiResponse = httpResponse, Backups = answer.Backups };
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, Backup>>(
+                "backup/list", ApiKey, args, "POST");
+            return new BackupResult()
+            {
+                ApiResponse = response.Item1,
+                Backups = response.Item2
+            };
         }
     }
 }

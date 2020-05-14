@@ -1,18 +1,15 @@
-﻿using System.IO;
-using Newtonsoft.Json;
-using Vultr.API.Models.Responses;
+﻿using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
 {
     public class AuthClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public AuthClient(string ApiKey)
+        public AuthClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
-
 
         /// <summary>
         /// Retrieve information about the current API key.
@@ -20,18 +17,13 @@ namespace Vultr.API.Clients
         /// <returns>Returns API key details and HTTP API Respopnse.</returns>
         public AuthResult GetInfo()
         {
-            var answer = new AuthResult();
-            var httpResponse = Extensions.ApiClient.ApiExecute("auth/info", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Auth>(
+                "auth/info", ApiKey);
+            return new AuthResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer.Auth = JsonConvert.DeserializeObject<Auth>(st);
-                }
-            }
-
-            return new AuthResult() { ApiResponse = httpResponse, Auth = answer.Auth };
+                ApiResponse = response.Item1,
+                Auth = response.Item2
+            };
         }
     }
 }

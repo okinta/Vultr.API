@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
+using System.Net.Http;
 
 namespace Vultr.API.Models.Responses
 {
@@ -15,23 +15,27 @@ namespace Vultr.API.Models.Responses
         /// <returns>Integer</returns>
         /// <example>1</example>
         public string APPID { get; set; }
+
         /// <summary>
         /// Application name as string
         /// </summary>
         /// <returns>String</returns>
         /// <example>LEMP</example>
         public string name { get; set; }
+
         /// <summary>
         /// Application short name
         /// </summary>
         /// <returns>lemp</returns>
         public string short_name { get; set; }
+
         /// <summary>
         /// Application deploy name
         /// </summary>
         /// <returns>String</returns>
         /// <example>LEMP on CentOS 6 x64</example>
         public string deploy_name { get; set; }
+
         /// <summary>
         /// Application's surcharge
         /// </summary>
@@ -50,10 +54,11 @@ namespace Vultr.API.Models.Responses
         /// </summary>
         /// <returns>Applications Dictionary</returns>
         public Dictionary<string, Application> Applications { get; set; }
+
         /// <summary>
         /// Returns API Result with HttpWebResponse
         /// </summary>
         /// <returns>HttpWebResponse</returns>
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 }

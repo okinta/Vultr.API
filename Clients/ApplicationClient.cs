@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
 {
     public class ApplicationClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public ApplicationClient(string ApiKey)
+        public ApplicationClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = ApiKey;
         }
 
         /// <summary>
@@ -20,18 +18,13 @@ namespace Vultr.API.Clients
         /// <returns>Returns application list and HTTP API Respopnse.</returns>
         public ApplicationResult GetApplications()
         {
-            var answer = new ApplicationResult();
-            var httpResponse = Extensions.ApiClient.ApiExecute("app/list", "");
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<
+                Dictionary<string, Application>>("app/list", ApiKey);
+            return new ApplicationResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer.Applications = JsonConvert.DeserializeObject<Dictionary<string, Application>>(st);
-                }
-            }
-
-            return new ApplicationResult() { ApiResponse = httpResponse, Applications = answer.Applications };
+                ApiResponse = response.Item1,
+                Applications = response.Item2
+            };
         }
     }
 }

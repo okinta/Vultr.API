@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
+using System.Net.Http;
 
 namespace Vultr.API.Models.Responses
 {
@@ -19,7 +19,7 @@ namespace Vultr.API.Models.Responses
     public struct RegionResult
     {
         public Dictionary<int, Region> Regions { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public class PlanIdsClass
@@ -30,6 +30,6 @@ namespace Vultr.API.Models.Responses
     public struct RegionAvailabilityResult
     {
         public PlanIdsClass PlanIds { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 }

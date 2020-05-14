@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
 {
     public class SSHKeyClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public SSHKeyClient(string ApiKey)
+        public SSHKeyClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
 
         /// <summary>
@@ -20,18 +18,13 @@ namespace Vultr.API.Clients
         /// <returns>List of all the SSH keys on the current account.</returns>
         public SSHKeyResult GetSSHKeys()
         {
-            var answer = new Dictionary<string, SSHKey>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("sshkey/list", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, SSHKey>>(
+                   "sshkey/list", ApiKey);
+            return new SSHKeyResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<string, SSHKey>>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
-
-            return new SSHKeyResult() { ApiResponse = httpResponse, SSHKeys = answer };
+                ApiResponse = response.Item1,
+                SSHKeys = response.Item2
+            };
         }
 
         /// <summary>
@@ -42,21 +35,19 @@ namespace Vultr.API.Clients
         /// <returns>SSHKey element with only SSHKEYID.</returns>
         public SSHKeyCreateResult CreateSSHKey(string name, string ssh_key)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("name", name));
-            dict.Add(new KeyValuePair<string, object>("ssh_key", ssh_key));
-            var answer = new SSHKey();
-            var httpResponse = Extensions.ApiClient.ApiExecute("sshkey/create", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<SSHKey>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("name", name),
+                new KeyValuePair<string, object>("ssh_key", ssh_key)
+            };
 
-            return new SSHKeyCreateResult() { ApiResponse = httpResponse, SSHKey = answer };
+            var response = Extensions.ApiClient.ApiExecute<SSHKey>(
+                "sshkey/create", ApiKey, args, "POST");
+            return new SSHKeyCreateResult()
+            {
+                ApiResponse = response.Item1,
+                SSHKey = response.Item2
+            };
         }
 
         /// <summary>
@@ -66,18 +57,17 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public SSHKeyDeleteResult DeleteSSHKey(string SSHKEYID)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SSHKEYID", SSHKEYID));
-            var httpResponse = Extensions.ApiClient.ApiExecute("sshkey/destroy", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
-            }
+                new KeyValuePair<string, object>("SSHKEYID", SSHKEYID)
+            };
 
-            return new SSHKeyDeleteResult() { ApiResponse = httpResponse };
+            var response = Extensions.ApiClient.ApiExecute<SSHKey>(
+                "sshkey/destroy", ApiKey, args, "POST");
+            return new SSHKeyDeleteResult()
+            {
+                ApiResponse = response.Item1
+            };
         }
 
         /// <summary>
@@ -87,20 +77,19 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public SSHKeyUpdateResult UpdateSSHKey(SSHKey SSHKey)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("name", SSHKey.name));
-            dict.Add(new KeyValuePair<string, object>("SSHKEYID", SSHKey.SSHKEYID));
-            dict.Add(new KeyValuePair<string, object>("ssh_key", SSHKey.ssh_key));
-            var httpResponse = Extensions.ApiClient.ApiExecute("sshkey/update", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
-            }
+                new KeyValuePair<string, object>("name", SSHKey.name),
+                new KeyValuePair<string, object>("SSHKEYID", SSHKey.SSHKEYID),
+                new KeyValuePair<string, object>("ssh_key", SSHKey.ssh_key)
+            };
 
-            return new SSHKeyUpdateResult() { ApiResponse = httpResponse };
+            var response = Extensions.ApiClient.ApiExecute<SSHKey>(
+                "sshkey/update", ApiKey, args, "POST");
+            return new SSHKeyUpdateResult()
+            {
+                ApiResponse = response.Item1
+            };
         }
     }
 }

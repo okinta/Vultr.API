@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
 using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
 {
     public class SnapshotClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public SnapshotClient(string ApiKey)
+        public SnapshotClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
 
         /// <summary>
@@ -20,18 +18,13 @@ namespace Vultr.API.Clients
         /// <returns>List of all snapshots on the current account.</returns>
         public SnapshotResult GetSnapshots()
         {
-            var answer = new Dictionary<string, Snapshot>();
-            var httpResponse = Extensions.ApiClient.ApiExecute("snapshot/list", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Dictionary<string, Snapshot>>(
+                "snapshot/list", ApiKey);
+            return new SnapshotResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Dictionary<string, Snapshot>>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
-
-            return new SnapshotResult() { ApiResponse = httpResponse, Snapshots = answer };
+                ApiResponse = response.Item1,
+                Snapshots = response.Item2
+            };
         }
 
         /// <summary>
@@ -42,21 +35,19 @@ namespace Vultr.API.Clients
         /// <returns>Network element with only NETWORKID.</returns>
         public SnapshotCreateResult CreateSnapshot(int SUBID, string Description)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SUBID", SUBID));
-            dict.Add(new KeyValuePair<string, object>("description", Description));
-            var answer = new Snapshot();
-            var httpResponse = Extensions.ApiClient.ApiExecute("snapshot/create", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                    answer = JsonConvert.DeserializeObject<Snapshot>((st ?? "") == "[]" ? "{}" : st);
-                }
-            }
+                new KeyValuePair<string, object>("SUBID", SUBID),
+                new KeyValuePair<string, object>("description", Description)
+            };
 
-            return new SnapshotCreateResult() { ApiResponse = httpResponse, Snapshot = answer };
+            var response = Extensions.ApiClient.ApiExecute<Snapshot>(
+                "snapshot/create", ApiKey, args, "POST");
+            return new SnapshotCreateResult()
+            {
+                ApiResponse = response.Item1,
+                Snapshot = response.Item2
+            };
         }
 
         /// <summary>
@@ -66,18 +57,17 @@ namespace Vultr.API.Clients
         /// <returns>No response, check HTTP result code.</returns>
         public SnapshotDeleteResult DeleteSnapshot(string SNAPSHOTID)
         {
-            var dict = new List<KeyValuePair<string, object>>();
-            dict.Add(new KeyValuePair<string, object>("SNAPSHOTID", SNAPSHOTID));
-            var httpResponse = Extensions.ApiClient.ApiExecute("snapshot/destroy", _ApiKey, dict, "POST");
-            if ((int)httpResponse.StatusCode == 200)
+            var args = new List<KeyValuePair<string, object>>
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    string st = streamReader.ReadToEnd();
-                }
-            }
+                new KeyValuePair<string, object>("SNAPSHOTID", SNAPSHOTID)
+            };
 
-            return new SnapshotDeleteResult() { ApiResponse = httpResponse };
+            var response = Extensions.ApiClient.ApiExecute<Snapshot>(
+                "snapshot/destroy", ApiKey, args, "POST");
+            return new SnapshotDeleteResult()
+            {
+                ApiResponse = response.Item1
+            };
         }
     }
 }

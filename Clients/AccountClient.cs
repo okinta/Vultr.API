@@ -1,16 +1,14 @@
-﻿using System.IO;
-using Newtonsoft.Json;
-using Vultr.API.Models.Responses;
+﻿using Vultr.API.Models.Responses;
 
 namespace Vultr.API.Clients
 {
     public class AccountClient
     {
-        private readonly string _ApiKey;
+        private string ApiKey { get; }
 
-        public AccountClient(string ApiKey)
+        public AccountClient(string apiKey)
         {
-            _ApiKey = ApiKey;
+            ApiKey = apiKey;
         }
 
         /// <summary>
@@ -19,17 +17,13 @@ namespace Vultr.API.Clients
         /// <returns>Returns account information and HTTP API Respopnse.</returns>
         public AccountResult GetInfo()
         {
-            var answer = new Account();
-            var httpResponse = Extensions.ApiClient.ApiExecute("account/info", _ApiKey);
-            if ((int)httpResponse.StatusCode == 200)
+            var response = Extensions.ApiClient.ApiExecute<Account>(
+                "account/info", ApiKey);
+            return new AccountResult()
             {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    answer = JsonConvert.DeserializeObject<Account>(streamReader.ReadToEnd());
-                }
-            }
-
-            return new AccountResult() { ApiResponse = httpResponse, Account = answer };
+                ApiResponse = response.Item1,
+                Account = response.Item2
+            };
         }
     }
 }

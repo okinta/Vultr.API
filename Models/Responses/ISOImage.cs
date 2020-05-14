@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
+using System.Net.Http;
 using System.Numerics;
 
 namespace Vultr.API.Models.Responses
@@ -19,12 +19,12 @@ namespace Vultr.API.Models.Responses
     public struct ISOImageCreateResult
     {
         public ISOImage ISOImage { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct ISOImageResult
     {
         public Dictionary<string, ISOImage> ISOImages { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 }

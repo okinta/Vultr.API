@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using System.Net.Http;
 
 namespace Vultr.API.Models.Responses
 {
@@ -12,6 +12,6 @@ namespace Vultr.API.Models.Responses
     public struct AuthResult
     {
         public Auth Auth { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 }

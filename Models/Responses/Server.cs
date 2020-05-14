@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
+using System.Net.Http;
 
 namespace Vultr.API.Models.Responses
 {
@@ -53,7 +53,7 @@ namespace Vultr.API.Models.Responses
     public struct BandwidthResult
     {
         public BandWidth BandWidth { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public class V6Networks
@@ -66,12 +66,12 @@ namespace Vultr.API.Models.Responses
     public struct ServerResult
     {
         public Dictionary<string, Server> Servers { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 
     public struct CreateServerResult
     {
         public CreateServer Server { get; set; }
-        public HttpWebResponse ApiResponse { get; set; }
+        public HttpResponseMessage ApiResponse { get; set; }
     }
 }
