@@ -73,5 +73,42 @@ namespace Tests.Properties {
                 return ResourceManager.GetString("AccountInfo", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///    &quot;SCRIPTID&quot;: 5
+        ///}.
+        /// </summary>
+        internal static string CreateStartupScript {
+            get {
+                return ResourceManager.GetString("CreateStartupScript", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///    &quot;3&quot;: {
+        ///        &quot;SCRIPTID&quot;: &quot;3&quot;,
+        ///        &quot;date_created&quot;: &quot;2014-05-21 15:27:18&quot;,
+        ///        &quot;date_modified&quot;: &quot;2014-05-21 15:27:18&quot;,
+        ///        &quot;name&quot;: &quot;test &quot;,
+        ///        &quot;type&quot;: &quot;boot&quot;,
+        ///        &quot;script&quot;: &quot;#!/bin/bash echo Hello World &gt; /root/hello&quot;
+        ///    },
+        ///    &quot;5&quot;: {
+        ///        &quot;SCRIPTID&quot;: &quot;5&quot;,
+        ///        &quot;date_created&quot;: &quot;2014-08-22 15:27:18&quot;,
+        ///        &quot;date_modified&quot;: &quot;2014-09-22 15:27:18&quot;,
+        ///        &quot;name&quot;: &quot;test &quot;,
+        ///        &quot;type&quot;: &quot;pxe&quot;,
+        ///        &quot;script&quot;: &quot;#!ipxe\necho Hello World\nshell&quot;
+        ///    }
+        ///}.
+        /// </summary>
+        internal static string StartupScripts {
+            get {
+                return ResourceManager.GetString("StartupScripts", resourceCulture);
+            }
+        }
     }
 }

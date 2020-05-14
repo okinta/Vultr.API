@@ -126,4 +126,31 @@
 }</value>
     <comment>Example account information pulled from https://www.vultr.com/api/#account</comment>
   </data>
+  <data name="CreateStartupScript" xml:space="preserve">
+    <value>{
+    "SCRIPTID": 5
+}</value>
+    <comment>Example output for creating a new startup script pulled from https://www.vultr.com/api/#startupscript_create</comment>
+  </data>
+  <data name="StartupScripts" xml:space="preserve">
+    <value>{
+    "3": {
+        "SCRIPTID": "3",
+        "date_created": "2014-05-21 15:27:18",
+        "date_modified": "2014-05-21 15:27:18",
+        "name": "test ",
+        "type": "boot",
+        "script": "#!/bin/bash echo Hello World &gt; /root/hello"
+    },
+    "5": {
+        "SCRIPTID": "5",
+        "date_created": "2014-08-22 15:27:18",
+        "date_modified": "2014-09-22 15:27:18",
+        "name": "test ",
+        "type": "pxe",
+        "script": "#!ipxe\necho Hello World\nshell"
+    }
+}</value>
+    <comment>Example startup scripts pulled from https://www.vultr.com/api/#startupscript</comment>
+  </data>
 </root>

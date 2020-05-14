@@ -6,13 +6,8 @@ using Xunit;
 
 namespace Tests.Clients
 {
-    public class AccountClientTest
+    public class AccountClientTest : BaseClientTest
     {
-        private const int TestPort = 8451;
-        private const string TestURL = "http://localhost:8451/";
-
-        protected VultrClient Client { get; } = new VultrClient("abc123", TestURL);
-
         [Fact]
         public void TestGetInfo()
         {
@@ -25,18 +20,13 @@ namespace Tests.Clients
         [Fact]
         public void TestMockGetInfo()
         {
-            var requestHandlers = new List<MockHttpHandler>()
+            using var _ = GetMockServer(new List<MockHttpHandler>()
             {
                 new MockHttpHandler("/account/info", "GET", (req, rsp, prm) =>
                     Resources.AccountInfo)
-            };
-
-            using (new MockServer(TestPort, requestHandlers))
-            {
-                var account = Client.Account.GetInfo();
-
-                Assert.Equal("-5519.11", account.Account.balance);
-            }
+            });
+            var account = Client.Account.GetInfo();
+            Assert.Equal("-5519.11", account.Account.balance);
         }
     }
 }
