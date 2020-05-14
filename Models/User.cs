@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Net.Http;
 
-namespace Vultr.API.Models.Responses
+namespace Vultr.API.Models
 {
     public class User
     {

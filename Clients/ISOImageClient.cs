@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using Vultr.API.Extensions;
-using Vultr.API.Models.Responses;
+using Vultr.API.Models;
 
 namespace Vultr.API.Clients
 {

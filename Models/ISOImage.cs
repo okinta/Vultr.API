@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Numerics;
 
-namespace Vultr.API.Models.Responses
+namespace Vultr.API.Models
 {
     public class ISOImage
     {
