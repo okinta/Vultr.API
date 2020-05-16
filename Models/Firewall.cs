@@ -67,16 +67,4 @@ namespace Vultr.API.Models
     {
         public HttpResponseMessage ApiResponse { get; set; }
     }
-
-    public enum IPTYPE
-    {
-        V4,
-        V6
-    }
-
-    public enum FirewallDirection
-    {
-        In,
-        Out
-    }
 }

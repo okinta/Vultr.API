@@ -24,18 +24,23 @@ namespace Vultr.API.Clients
         }
 
         /// <summary>
-        /// Create a new reserved IP. Reserved IPs can only be used within the same datacenter for which they were created.
+        /// Create a new reserved IP. Reserved IPs can only be used within the same
+        /// datacenter for which they were created.
         /// </summary>
-        /// <param name="DCID">Location to create this reserved IP in.</param>
+        /// <param name="DCID">Location to create this reserved IP in. See
+        /// v1/regions/list</param>
         /// <param name="ip_type">'v4' or 'v6' Type of reserved IP to create</param>
-        /// <param name="label">Label for this reserved IP.</param>
+        /// <param name="label">Optional. Label for this reserved IP</param>
         /// <returns>ReservedIP element with only SUBID.</returns>
-        public ReservedIPCreateResult CreateReservedIp(int DCID, IPTYPE ip_type, string label)
+        public ReservedIPCreateResult CreateReservedIp(
+            int DCID,
+            string ip_type,
+            string label)
         {
             var args = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("DCID", DCID),
-                new KeyValuePair<string, object>("ip_type", ip_type.ToString()),
+                new KeyValuePair<string, object>("ip_type", ip_type),
                 new KeyValuePair<string, object>("label", label)
             };
 

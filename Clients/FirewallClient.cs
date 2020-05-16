@@ -89,13 +89,16 @@ namespace Vultr.API.Clients
         /// <summary>
         /// List the rules in a firewall group.
         /// </summary>
-        /// <param name="FIREWALLGROUPID">Target firewall group. See GetFirewallGroups()</param>
-        /// <param name="ip_type">IP address type. Possible values: "IPV4", "IPV6"</param>
-        /// <param name="direction">Direction of rule.</param>
-        /// <returns>List of all firewall roles on the current account.</returns>
+        /// <param name="FIREWALLGROUPID">Target firewall group. See
+        /// /v1/firewall/group_list.</param>
+        /// <param name="direction">Direction of firewall rules. Possible values:
+        /// "in".</param>
+        /// <param name="ip_type">IP address type. Possible values: "v4", "v6".</param>
+        /// <returns>The list of firewall rules.</returns>
         public FirewallRuleResult GetFirewallRules(
-            string FIREWALLGROUPID, IPTYPE ip_type = IPTYPE.V4,
-            FirewallDirection direction = FirewallDirection.In)
+            string FIREWALLGROUPID,
+            string direction = "in",
+            string ip_type = null)
         {
             var args = new List<KeyValuePair<string, object>>
             {
@@ -116,19 +119,46 @@ namespace Vultr.API.Clients
         /// <summary>
         /// Create a rule in a firewall group.
         /// </summary>
-        /// <param name="FirewallRule">New FirewallRule object.</param>
-        /// <returns>FirewallGroup element with only FIREWALLGROUPID.</returns>
-        public FirewallRuleCreateResult CreateFirewallRule(string FIREWALLGROUPID, FirewallRule FirewallRule, FirewallDirection FirewallDirection = FirewallDirection.In)
+        /// <param name="FIREWALLGROUPID">Target firewall group. See
+        /// /v1/firewall/group_list.</param>
+        /// <param name="direction">Direction of rule. Possible values: "in".</param>
+        /// <param name="ip_type">IP address type. Possible values: "v4", "v6".</param>
+        /// <param name="protocol">Protocol type. Possible values: "icmp", "tcp",
+        /// "udp", "gre".</param>
+        /// <param name="subnet">IP address representing a subnet. The IP address
+        /// format must match with the "ip_type" parameter value.</param>
+        /// <param name="subnet_size">IP prefix size in bits.</param>
+        /// <param name="port">Optional. TCP/UDP only. This field can be an integer
+        /// value specifying a port or a colon separated port range.</param>
+        /// <param name="notes">Optional. This field supports notes up to 255
+        /// characters.</param>
+        /// <param name="source">Optional. If the source string is given a value of
+        /// "cloudflare" subnet and subnet_size will both be ignored, this will allow
+        /// all of Cloudflare's IP space through the firewall. Possible values: "",
+        /// "cloudflare".</param>
+        /// <returns>The newly created rule.</returns>
+        public FirewallRuleCreateResult CreateFirewallRule(
+            string FIREWALLGROUPID,
+            string direction = "in",
+            string ip_type = null,
+            string protocol = null,
+            string subnet = null,
+            int? subnet_size = null,
+            string port = null,
+            string notes = null,
+            string source = null)
         {
             var args = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("FIREWALLGROUPID", FIREWALLGROUPID),
-                new KeyValuePair<string, object>("direction", FirewallDirection.ToString()),
-                new KeyValuePair<string, object>("action", FirewallRule.action),
-                new KeyValuePair<string, object>("port", FirewallRule.port),
-                new KeyValuePair<string, object>("protocol", FirewallRule.protocol),
-                new KeyValuePair<string, object>("subnet", FirewallRule.subnet),
-                new KeyValuePair<string, object>("subnet_size", FirewallRule.subnet_size)
+                new KeyValuePair<string, object>("direction", direction),
+                new KeyValuePair<string, object>("ip_type", ip_type),
+                new KeyValuePair<string, object>("protocol", protocol),
+                new KeyValuePair<string, object>("subnet", subnet),
+                new KeyValuePair<string, object>("subnet_size", subnet_size),
+                new KeyValuePair<string, object>("port", port),
+                new KeyValuePair<string, object>("notes", notes),
+                new KeyValuePair<string, object>("source", source)
             };
 
             var response = ApiExecute<FirewallRule>(
