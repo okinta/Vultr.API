@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using Vultr.API.Models;
 using Vultr.Clients;
 
@@ -285,6 +286,24 @@ namespace Vultr.API.Clients
                 "server/create", ApiKey, args, ApiMethod.POST);
             return new CreateServerResult() {
                 ApiResponse = response.Item1, Server = response.Item2 };
+        }
+
+        /// <summary>
+        /// Destroy (delete) a virtual machine. All data will be permanently lost, and
+        /// the IP address will be released. There is no going back from this call.
+        /// </summary>
+        /// <param name="SUBID">Unique identifier for this subscription. These can be
+        /// found using the v1/server/list call.</param>
+        /// <returns>The HTTP response from the API call.</returns>
+        public HttpResponseMessage DestroyServer(int SUBID)
+        {
+            var args = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("SUBID", SUBID)
+            };
+
+            return ApiExecute<CreateServer>(
+                "server/destroy", ApiKey, args, ApiMethod.POST).Item1;
         }
     }
 }
