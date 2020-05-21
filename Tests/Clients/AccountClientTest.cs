@@ -1,12 +1,11 @@
-﻿using MockHttpServer;
-using System.Collections.Generic;
+﻿using MockHttp.Net;
 using Tests.Properties;
 using Vultr.API;
 using Xunit;
 
 namespace Tests.Clients
 {
-    public class AccountClientTest : BaseClientTest
+    public class AccountClientTest
     {
         [Fact]
         public void TestGetInfo()
@@ -20,13 +19,12 @@ namespace Tests.Clients
         [Fact]
         public void TestMockGetInfo()
         {
-            using var _ = GetMockServer(new List<MockHttpHandler>()
-            {
-                new MockHttpHandler("/account/info", "GET", (req, rsp, prm) =>
-                    Resources.AccountInfo)
-            });
-            var account = Client.Account.GetInfo();
+            using var requests = new MockVultrRequests(
+                new HttpHandler(
+                    "/account/info", Resources.AccountInfo));
+            var account = requests.Client.Account.GetInfo();
             Assert.Equal("-5519.11", account.Account.balance);
+            requests.AssertAllCalledOnce();
         }
     }
 }
