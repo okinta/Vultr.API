@@ -11,6 +11,8 @@ namespace Vultr.API.Models
         public string port { get; set; }
         public string subnet { get; set; }
         public int subnet_size { get; set; }
+        public string source { get; set; }
+        public string notes { get; set; }
     }
 
     public class FirewallGroup
