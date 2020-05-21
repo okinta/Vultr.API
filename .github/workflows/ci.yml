@@ -1,0 +1,30 @@
+name: Run tests and publish
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/core/sdk:5.0-alpine
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: dotnet build Tests/Tests.csproj
+      - name: Test
+        run: dotnet test Tests/Tests.csproj
+
+  publish:
+    needs: test
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/core/sdk:5.0-alpine
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish on version change
+        id: publish_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: Vultr.API.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
