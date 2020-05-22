@@ -11,7 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Inject Vultr API Key
-        run: sed -E 's/(<Value[^>]*>)[^<]*/\1${{secrets.VULTR_API_KEY}}/g' -i Tests/Settings.settings
+        env:
+          VULTR_API_KEY: ${{secrets.VULTR_API_KEY}}
+        run: |
+          sed -E 's/(<Value[^>]*>)[^<]*/\1'"$VULTR_API_KEY"'/g' -i Tests/Settings.settings
+          sed -E "s/(DefaultSettingValueAttribute\\(\")[^\"]*/\1$VULTR_API_KEY/g" -i \
+            Tests/Settings.Designer.cs
       - name: Build
         run: dotnet build Tests/Tests.csproj
       - name: Test
