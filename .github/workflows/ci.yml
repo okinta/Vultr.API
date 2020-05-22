@@ -10,6 +10,8 @@ jobs:
     container: mcr.microsoft.com/dotnet/core/sdk:5.0-alpine
     steps:
       - uses: actions/checkout@v2
+      - name: Inject Vultr API Key
+        run: sed -E 's/(<Value[^>]*>)[^<]*/\1${{secrets.VULTR_API_KEY}}/g' -i Tests/Settings.settings
       - name: Build
         run: dotnet build Tests/Tests.csproj
       - name: Test
